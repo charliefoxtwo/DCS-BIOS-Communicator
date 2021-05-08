@@ -9,7 +9,7 @@
         <Title>DCS-BIOS Communicator</Title>
         <Authors>charliefoxtwo</Authors>
         <Description>Provides methods and classes for subscribing to DCS-BIOS events.</Description>
-        <PackageVersion>0.2.0-alpha</PackageVersion>
+        <PackageVersion>0.2.0</PackageVersion>
         <PackageProjectUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</PackageProjectUrl>
         <PackageLicenseUrl>https://www.gnu.org/licenses/gpl-3.0.en.html</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</RepositoryUrl>
@@ -24,6 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="resources/airplane.png" Pack="true" PackagePath=""/>
+        <None Include="resources/airplane.png" Pack="true" PackagePath="" />
     </ItemGroup>
 </Project>
