@@ -28,3 +28,5 @@ jobs:
 
           # Regex pattern to extract version info in a capturing group
           VERSION_REGEX: ^\s*<PackageVersion>(.*)<\/PackageVersion>\s*$
+          
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
