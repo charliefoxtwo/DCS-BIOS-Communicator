@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DcsBios.Communicator
 {
-    public class BiosStateMachine
+    internal class BiosStateMachine
     {
         private enum State
         {

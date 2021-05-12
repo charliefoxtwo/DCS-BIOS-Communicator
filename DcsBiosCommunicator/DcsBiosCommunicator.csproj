@@ -9,7 +9,7 @@
         <Title>DCS-BIOS Communicator</Title>
         <Authors>charliefoxtwo</Authors>
         <Description>Provides methods and classes for subscribing to DCS-BIOS events.</Description>
-        <PackageVersion>1.0.0</PackageVersion>
+        <PackageVersion>2.0.0</PackageVersion>
         <PackageProjectUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</PackageProjectUrl>
         <PackageLicenseUrl>https://www.gnu.org/licenses/gpl-3.0.en.html</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</RepositoryUrl>
@@ -17,7 +17,11 @@
         <PackageTags>dcs</PackageTags>
         <PackageIcon>airplane.png</PackageIcon>
         <PackageIconUrl>https://raw.githubusercontent.com/charliefoxtwo/DCS-BIOS-Communicator/main/DcsBiosCommunicator/resources/airplane.png</PackageIconUrl>
-        <PackageReleaseNotes>First launch of DcsBios.Communicator!</PackageReleaseNotes>
+        <PackageReleaseNotes> * modified access of some internal classes from public to internal
+ * converted logging to compile-time constants to reduce memory footprint
+ - removed unused classes</PackageReleaseNotes>
+        <AssemblyVersion>2.0.0</AssemblyVersion>
+        <FileVersion>2.0.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
