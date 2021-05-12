@@ -4,7 +4,7 @@ using DcsBios.Communicator.DataParsers;
 
 namespace DcsBios.Communicator
 {
-    public class IntegerHandler
+    internal class IntegerHandler
     {
         public int Address { get; }
 

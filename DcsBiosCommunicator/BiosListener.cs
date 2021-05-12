@@ -11,7 +11,7 @@ namespace DcsBios.Communicator
 {
     public class BiosListener : IDisposable
     {
-        public const string AircraftNameBiosCode = "_ACFT_NAME";
+        internal const string AircraftNameBiosCode = "_ACFT_NAME";
 
         private readonly BiosStateMachine _parser = new();
         private readonly IUdpReceiveClient _client;
@@ -169,6 +169,9 @@ namespace DcsBios.Communicator
             _log.LogInformation("DCS-BIOS listener started");
         }
 
+        /// <summary>
+        /// Stops the existing listener thread and enacts a blacking wait until it is complete.
+        /// </summary>
         public void Stop()
         {
             _log.LogDebug("Stopping DCS-BIOS listener...");
