@@ -42,7 +42,7 @@ namespace DcsBios.Communicator
         public async Task Send(string biosAddress, string data)
         {
             var message = $"{biosAddress} {data}{BlankBiosCommand}";
-            _log.LogDebug($"Sending {{{message.TrimEnd('\n')}}} to DCS-BIOS");
+            _log.LogDebug("Sending {{{BiosAddress} {Data}}} to DCS-BIOS", biosAddress, data);
             var byteData = Encoding.UTF8.GetBytes(message);
             await _client.SendAsync(byteData, byteData.Length, _target);
         }

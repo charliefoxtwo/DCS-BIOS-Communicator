@@ -122,7 +122,7 @@ namespace DcsBios.Communicator
                 integerActions.TryGetValue(address, out var handler) ||
                 _integerActions.TryGetValue(address, out handler))
             {
-                _log.LogTrace($"{address:x4} -> got int data -> {data:x4}");
+                _log.LogTrace("{Address:x4} -> got int data -> {Data:x4}", address, data);
                 foreach (var mask in handler.MaskShifts)
                 {
                     mask.AddData(address, data);
@@ -135,7 +135,7 @@ namespace DcsBios.Communicator
                 _moduleStringActions.TryGetValue(_activeAircraft, out var stringActions) &&
                 stringActions.TryGetValue(address, out var parser) || _stringActions.TryGetValue(address, out parser))
             {
-                _log.LogTrace($"{address:x4} -> got string data -> {data:x4}");
+                _log.LogTrace("{Address:x4} -> got int data -> {Data:x4}", address, data);
 
                 parser.AddData(address, data);
 
@@ -149,7 +149,7 @@ namespace DcsBios.Communicator
                     if (_activeAircraft != result)
                     {
                         _activeAircraft = result;
-                        _log.LogInformation($"New aircraft detected -> {{{_activeAircraft}}}");
+                        _log.LogInformation("New aircraft detected -> {{{ActiveAircraft}}}", _activeAircraft);
                     }
                 }
 
@@ -182,14 +182,14 @@ namespace DcsBios.Communicator
             while (!ctx.IsCancellationRequested)
             {
                 var data = await _client.ReceiveAsync();
-                _log.LogTrace($"bios data received: {data.Buffer.Length}");
+                _log.LogTrace("bios data received of length {DataLength}", data.Buffer.Length);
                 try
                 {
                     _parser.ProcessBytes(data.Buffer);
                 }
                 catch (Exception ex)
                 {
-                    _log.LogCritical(ex.ToString());
+                    _log.LogCritical("Critical exception in Bios Listener: {Exception}", ex);
                     throw;
                 }
             }
