@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -13,7 +13,7 @@ namespace DcsBios.Communicator
     {
         internal const string AircraftNameBiosCode = "_ACFT_NAME";
 
-        private readonly BiosStateMachine _parser = new();
+        private readonly BiosStateMachine _parser;
         private readonly IUdpReceiveClient _client;
         private readonly Dictionary<int, IntegerHandler> _integerActions = new();
         private readonly Dictionary<int, StringParser> _stringActions = new();
@@ -30,13 +30,15 @@ namespace DcsBios.Communicator
         public BiosListener(in IUdpReceiveClient client, in IBiosTranslator biosTranslator, in ILogger<BiosListener> logger)
         {
             _client = client;
-            _parser.OnDataWrite += OnBiosDataReceived;
             _biosTranslator = biosTranslator;
             _log = logger;
+            _parser = new BiosStateMachine(logger);
+            _parser.OnDataWrite += OnBiosDataReceived;
         }
 
         public void RegisterConfiguration(AircraftBiosConfiguration configuration)
         {
+            _log.LogDebug("Loading config for module {Module}", configuration.AircraftName);
             foreach (var control in configuration.Values.SelectMany(c => c.Values))
             {
                 RegisterControl(configuration.AircraftName, control);
@@ -47,6 +49,8 @@ namespace DcsBios.Communicator
         {
             foreach (var output in control.Outputs)
             {
+                _log.LogTrace("Registering control {Control} at {Address}", control.Identifier, output.Address);
+
                 switch (output)
                 {
                     case OutputInteger io:
@@ -56,6 +60,7 @@ namespace DcsBios.Communicator
                         RegisterStringControl(module, control, so);
                         break;
                     default:
+                        _log.LogCritical("invalid control output type {OutputType}", output.GetType());
                         throw new ArgumentException($"invalid output type: {output.GetType()}");
                 }
             }
@@ -117,6 +122,8 @@ namespace DcsBios.Communicator
 
         private void OnBiosDataReceived(int address, int data)
         {
+            _log.LogTrace("{Address:x4} -> got data -> {Data:x4}", address, data);
+
             if (_activeAircraft is not null &&
                 _moduleIntegerActions.TryGetValue(_activeAircraft, out var integerActions) &&
                 integerActions.TryGetValue(address, out var handler) ||
@@ -135,7 +142,7 @@ namespace DcsBios.Communicator
                 _moduleStringActions.TryGetValue(_activeAircraft, out var stringActions) &&
                 stringActions.TryGetValue(address, out var parser) || _stringActions.TryGetValue(address, out parser))
             {
-                _log.LogTrace("{Address:x4} -> got int data -> {Data:x4}", address, data);
+                _log.LogTrace("{Address:x4} -> got string data -> {Data:x4}", address, data);
 
                 parser.AddData(address, data);
 
@@ -161,7 +168,15 @@ namespace DcsBios.Communicator
         {
             _log.LogDebug("Starting DCS-BIOS listener...");
 
-            if (!_cts.IsCancellationRequested && _delegateThread is null)
+            if (_delegateThread is not null)
+            {
+                _log.LogWarning("DCS-BIOS listener thread already started");
+            }
+            else if (_cts.IsCancellationRequested)
+            {
+                _log.LogWarning("DCS-BIOS listener cancellation requested, aborting start...");
+            }
+            else
             {
                 _delegateThread = Listener(_cts.Token);
             }
@@ -184,10 +199,11 @@ namespace DcsBios.Communicator
         {
             while (!ctx.IsCancellationRequested)
             {
-                var data = await _client.ReceiveAsync();
-                _log.LogTrace("bios data received of length {DataLength}", data.Buffer.Length);
                 try
                 {
+                    _log.LogTrace("awaiting bios data...");
+                    var data = await _client.ReceiveAsync();
+                    _log.LogTrace("bios data received of length {DataLength}", data.Buffer.Length);
                     _parser.ProcessBytes(data.Buffer);
                 }
                 catch (Exception ex)

@@ -1,13 +1,14 @@
 
 # DCS BIOS Communicator
 
-![Nuget](https://img.shields.io/nuget/v/DcsBios.Communicator?style=flat-square)
+[![Nuget](https://img.shields.io/nuget/v/DcsBios.Communicator?style=flat-square)](https://www.nuget.org/packages/DcsBios.Communicator/)
 [![.NET 5 CI build](https://github.com/charliefoxtwo/DCS-BIOS-Communicator/actions/workflows/ci-build.yml/badge.svg?branch=develop)](https://github.com/charliefoxtwo/DCS-BIOS-Communicator/actions/workflows/ci-build.yml)
-![GitHub](https://img.shields.io/github/license/charliefoxtwo/DCS-BIOS-Communicator?style=flat-square)
-![Discord](https://img.shields.io/discord/840762843917582347?style=flat-square)
+[![GitHub](https://img.shields.io/github/license/charliefoxtwo/DCS-BIOS-Communicator?style=flat-square)](LICENSE)
+[![Discord](https://img.shields.io/discord/840762843917582347?style=flat-square)](https://discord.gg/rWAF3AdsKT)
 
 DCS BIOS Communicator is a .net 5 library for interacting with DCS-BIOS. It parses the raw data bytes provided by DCS-BIOS and will trigger actions when it receives data.
 
+<img src="https://raw.githubusercontent.com/charliefoxtwo/DCS-BIOS-Communicator/main/DcsBiosCommunicator/resources/airplane.png" alt="DCS BIOS Communicator logo - a vector outline of an airplane" width="150" />
 
 ## Features
 
