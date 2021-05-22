@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace DcsBios.Communicator
 {
@@ -16,6 +17,7 @@ namespace DcsBios.Communicator
             WaitForSync,
         }
 
+        private readonly ILogger _log;
         private readonly Dictionary<State, Action<byte>> _actions;
 
         private State _state = State.WaitForSync;
@@ -30,8 +32,9 @@ namespace DcsBios.Communicator
         public event DataWriteDelegate? OnDataWrite;
         public event FrameSyncDelegate? OnFrameSync;
 
-        public BiosStateMachine()
+        public BiosStateMachine(ILogger log)
         {
+            _log = log;
             _actions = new Dictionary<State, Action<byte>>
             {
                 [State.AddressLow] = AddressLow,
@@ -104,6 +107,7 @@ namespace DcsBios.Communicator
             _data += data << 8;
             _count -= 1;
 
+            _log.LogTrace("Sending {Data:x4} to {Address:x4}", _data, _address);
             OnDataWrite?.Invoke(_address, _data);
 
             _address += 2;
