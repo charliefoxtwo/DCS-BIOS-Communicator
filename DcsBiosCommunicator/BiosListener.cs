@@ -11,7 +11,7 @@ namespace DcsBios.Communicator
 {
     public class BiosListener : IDisposable
     {
-        internal const string AircraftNameBiosCode = "_ACFT_NAME";
+        public const string AircraftNameBiosCode = "_ACFT_NAME";
 
         private readonly BiosStateMachine _parser;
         private readonly IUdpReceiveClient _client;
