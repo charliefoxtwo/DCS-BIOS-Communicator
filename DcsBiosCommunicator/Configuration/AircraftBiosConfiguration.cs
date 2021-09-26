@@ -56,10 +56,10 @@ namespace DcsBios.Communicator.Configuration
         /// Creates a configuration from a single json file
         /// </summary>
         /// <param name="configFile">File to create a configuration from</param>
-        /// <param name="aliases">Potential naming aliases to consider: BIOS module -> [DCS code alias]</param>
+        /// <param name="allAliases">Potential naming aliases to consider: BIOS module -> [DCS code alias]</param>
         /// <param name="logger">Logger</param>
         /// <returns></returns>
-        public static async Task<AircraftBiosConfiguration?> BuildFromConfiguration(FileSystemInfo configFile, Dictionary<string, HashSet<string>>? aliases = null, ILogger<AircraftBiosConfiguration>? logger = null)
+        public static async Task<AircraftBiosConfiguration?> BuildFromConfiguration(FileSystemInfo configFile, Dictionary<string, HashSet<string>>? allAliases = null, ILogger<AircraftBiosConfiguration>? logger = null)
         {
             var fileData = await File.ReadAllTextAsync(configFile.FullName);
 
@@ -80,7 +80,10 @@ namespace DcsBios.Communicator.Configuration
                 }
 
                 dcsConfiguration.AircraftName = Path.GetFileNameWithoutExtension(configFile.FullName);
-                dcsConfiguration.Aliases = aliases?[dcsConfiguration.AircraftName] ?? new HashSet<string>();
+                dcsConfiguration.Aliases =
+                    allAliases != null && allAliases.TryGetValue(dcsConfiguration.AircraftName, out var aircraftAliases)
+                        ? aircraftAliases
+                        : new HashSet<string>();
 
                 return dcsConfiguration;
             }
