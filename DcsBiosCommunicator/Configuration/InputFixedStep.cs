@@ -1,6 +1,6 @@
 ﻿namespace DcsBios.Communicator.Configuration
 {
-    public class InputFixedStep : BiosInput
+    public record InputFixedStep : BiosInput
     {
         public const string InterfaceType = "fixed_step";
         public const string Increment = "INC";

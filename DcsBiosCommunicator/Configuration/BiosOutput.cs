@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace DcsBios.Communicator.Configuration
 {
     [JsonConverter(typeof(OutputConverter))]
-    public abstract class BiosOutput
+    public abstract record BiosOutput
     {
         public int Address { get; set; }
 

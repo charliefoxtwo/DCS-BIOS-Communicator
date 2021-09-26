@@ -1,6 +1,6 @@
 ﻿namespace DcsBios.Communicator.Configuration
 {
-    public class InputSetState : BiosInput
+    public record InputSetState : BiosInput
     {
         public const string InterfaceType = "set_state";
 

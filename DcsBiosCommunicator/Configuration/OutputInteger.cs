@@ -1,6 +1,6 @@
 ﻿namespace DcsBios.Communicator.Configuration
 {
-    public class OutputInteger : BiosOutput
+    public record OutputInteger : BiosOutput
     {
         public static string OutputType => "integer";
 
