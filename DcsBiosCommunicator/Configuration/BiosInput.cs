@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace DcsBios.Communicator.Configuration
 {
     [JsonConverter(typeof(InputConverter))]
-    public abstract class BiosInput
+    public abstract record BiosInput
     {
         // TODO: enumify
         public string Interface { get; set; } = null!;

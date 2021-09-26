@@ -1,7 +1,7 @@
 ﻿// ReSharper disable UnusedMember.Global
 namespace DcsBios.Communicator.Configuration
 {
-    public class InputAction : BiosInput
+    public record InputAction : BiosInput
     {
         public const string InterfaceType = "action";
 

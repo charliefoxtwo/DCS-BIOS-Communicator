@@ -1,6 +1,6 @@
 ﻿namespace DcsBios.Communicator.Configuration
 {
-    public class InputVariableStep : InputSetState
+    public record InputVariableStep : InputSetState
     {
         public new const string InterfaceType = "variable_step";
 
