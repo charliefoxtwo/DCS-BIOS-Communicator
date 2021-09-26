@@ -9,7 +9,7 @@
         <Title>DCS-BIOS Communicator</Title>
         <Authors>charliefoxtwo</Authors>
         <Description>Provides methods and classes for subscribing to DCS-BIOS events.</Description>
-        <PackageVersion>2.0.2</PackageVersion>
+        <PackageVersion>3.0.0</PackageVersion>
         <PackageProjectUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</PackageProjectUrl>
         <PackageLicenseUrl>https://www.gnu.org/licenses/gpl-3.0.en.html</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</RepositoryUrl>
@@ -17,9 +17,10 @@
         <PackageTags>dcs</PackageTags>
         <PackageIcon>airplane.png</PackageIcon>
         <PackageIconUrl>https://raw.githubusercontent.com/charliefoxtwo/DCS-BIOS-Communicator/main/DcsBiosCommunicator/resources/airplane.png</PackageIconUrl>
-        <PackageReleaseNotes> - fixed bug where AircraftNameBiosCode wasn't exposed publicly</PackageReleaseNotes>
-        <AssemblyVersion>2.0.2</AssemblyVersion>
-        <FileVersion>2.0.2</FileVersion>
+        <PackageReleaseNotes> - handles parsing errors better
+ - parses aliases from alias file and includes them in returned configuration</PackageReleaseNotes>
+        <AssemblyVersion>3.0.0</AssemblyVersion>
+        <FileVersion>3.0.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
