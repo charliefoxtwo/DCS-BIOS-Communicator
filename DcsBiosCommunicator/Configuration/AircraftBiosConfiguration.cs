@@ -34,15 +34,17 @@ namespace DcsBios.Communicator.Configuration
         {
             var allFiles = configLocations.SelectMany(GetAllJsonFilesBelowDirectory).ToList();
             var aliasTasks = allFiles.Where(f => f.Name == aliasesFileName).Select(f => GetAliases(f, logger));
-            var aliases = (await Task.WhenAll(aliasTasks)).Aggregate((d1, d2) =>
-            {
-                foreach (var (key, value) in d2)
-                {
-                    d1.Add(key, value);
-                }
+            var aliasResults = await Task.WhenAll(aliasTasks);
 
-                return d1;
-            });
+            var aliases = new Dictionary<string, HashSet<string>>();
+
+            foreach (var result in aliasResults)
+            {
+                foreach (var (key, value) in result)
+                {
+                    aliases.Add(key, value);
+                }
+            }
 
             var configTasks = configLocations
                 .SelectMany(GetAllJsonFilesBelowDirectory)
