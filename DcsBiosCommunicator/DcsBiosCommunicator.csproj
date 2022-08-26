@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>DcsBios.Communicator</RootNamespace>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -9,7 +9,7 @@
         <Title>DCS-BIOS Communicator</Title>
         <Authors>charliefoxtwo</Authors>
         <Description>Provides methods and classes for subscribing to DCS-BIOS events.</Description>
-        <PackageVersion>3.0.1</PackageVersion>
+        <PackageVersion>4.0.0</PackageVersion>
         <PackageProjectUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</PackageProjectUrl>
         <PackageLicenseUrl>https://www.gnu.org/licenses/gpl-3.0.en.html</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</RepositoryUrl>
@@ -17,13 +17,15 @@
         <PackageTags>dcs</PackageTags>
         <PackageIcon>airplane.png</PackageIcon>
         <PackageIconUrl>https://raw.githubusercontent.com/charliefoxtwo/DCS-BIOS-Communicator/main/DcsBiosCommunicator/resources/airplane.png</PackageIconUrl>
-        <PackageReleaseNotes> - fix exception thrown when alias file not found</PackageReleaseNotes>
-        <AssemblyVersion>3.0.1</AssemblyVersion>
-        <FileVersion>3.0.1</FileVersion>
+        <PackageReleaseNotes> - fix exception thrown when module string addresses overlap
+ - update to .NET 6; .NET 5 EOL</PackageReleaseNotes>
+        <AssemblyVersion>4.0.0</AssemblyVersion>
+        <FileVersion>4.0.0</FileVersion>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
