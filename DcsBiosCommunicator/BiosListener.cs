@@ -16,7 +16,7 @@ namespace DcsBios.Communicator
         private readonly BiosStateMachine _parser;
         private readonly IUdpReceiveClient _client;
         private readonly Dictionary<int, IntegerHandler> _integerActions = new();
-        private readonly Dictionary<int, StringParser> _stringActions = new();
+        private readonly Dictionary<int, IList<StringParser>> _stringActions = new();
         private readonly Dictionary<string, Dictionary<int, IntegerHandler>> _moduleIntegerActions = new();
         private readonly Dictionary<string, Dictionary<int, StringParser>> _moduleStringActions = new();
         private string? _activeAircraft;
@@ -113,8 +113,13 @@ namespace DcsBios.Communicator
                 moduleParsers = new Dictionary<int, StringParser>();
             for (var i = 0; i < parser.Length; i++)
             {
-                _stringActions.Add(parser.Address + i, parser);
                 moduleParsers.Add(parser.Address + i, parser);
+
+                // the master list can have more than one item for a given module. Frankly if we ever have to use this we're probably
+                // in some deep doo-doo, but it's better to be defensive given https://github.com/charliefoxtwo/TouchDCS/issues/18
+                if (!_stringActions.TryGetValue(parser.Address + i, out var parsers)) parsers = new List<StringParser>();
+                parsers.Add(parser);
+                _stringActions[parser.Address + i] = parsers;
             }
 
             _moduleStringActions[module] = moduleParsers;
@@ -140,28 +145,40 @@ namespace DcsBios.Communicator
             // some controls are registered to both strings and integers, because life is fun like that.
             if (_activeAircraft is not null &&
                 _moduleStringActions.TryGetValue(_activeAircraft, out var stringActions) &&
-                stringActions.TryGetValue(address, out var parser) || _stringActions.TryGetValue(address, out parser))
+                stringActions.TryGetValue(address, out var parser))
             {
-                _log.LogTrace("{Address:x4} -> got string data -> {Data:x4}", address, data);
-
-                parser.AddData(address, data);
-
-                var result = parser.CurrentValue;
-                if (parser.BiosCode == AircraftNameBiosCode)
-                {
-                    if (!parser.DataReady) return;
-                    // name is fixed-length and null-terminated. fun.
-                    result = result.Split(default(char))[0];
-                    if (string.IsNullOrEmpty(result)) return; // we just haven't loaded the aircraft name yet
-                    if (_activeAircraft != result)
-                    {
-                        _activeAircraft = result;
-                        _log.LogInformation("New aircraft detected -> {{{ActiveAircraft}}}", _activeAircraft);
-                    }
-                }
-
-                _biosTranslator.FromBios(parser.BiosCode, result);
+                ProcessStringData(parser, address, data);
             }
+            else if (_stringActions.TryGetValue(address, out var parsers))
+            {
+                foreach (var p in parsers)
+                {
+                    ProcessStringData(p, address, data);
+                }
+            }
+        }
+
+        private void ProcessStringData(StringParser parser, int address, int data)
+        {
+            _log.LogTrace("{Address:x4} -> got string data -> {Data:x4}", address, data);
+
+            parser.AddData(address, data);
+
+            var result = parser.CurrentValue;
+            if (parser.BiosCode == AircraftNameBiosCode)
+            {
+                if (!parser.DataReady) return;
+                // name is fixed-length and null-terminated. fun.
+                result = result.Split(default(char))[0];
+                if (string.IsNullOrEmpty(result)) return; // we just haven't loaded the aircraft name yet
+                if (_activeAircraft != result)
+                {
+                    _activeAircraft = result;
+                    _log.LogInformation("New aircraft detected -> {{{ActiveAircraft}}}", _activeAircraft);
+                }
+            }
+
+            _biosTranslator.FromBios(parser.BiosCode, result);
         }
 
         public void Start()
