@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DcsBios.Communicator.Configuration;
@@ -314,7 +314,24 @@ namespace DcsBiosCommunicatorTest
                             Type = "integer",
                         },
                     }
-                )
+                ),
+                ["FAKE_CONTROL"] = (
+                    new List<BiosInput>
+                    {
+                        new InputUnknown
+                        {
+                            Interface = "this_does_not_exist",
+                        },
+                    },
+                    new List<BiosOutput>
+                    {
+                        new OutputUnknown
+                        {
+                            Address = 29975,
+                            Type = "this_does_not_exist_either",
+                        },
+                    }
+                ),
             };
 
         [Theory]
@@ -330,6 +347,7 @@ namespace DcsBiosCommunicatorTest
         [TestCase("HUD Control Panel", "HUD_VIDEO_CONTROL_SW", "selector", "none", "limited_rotary")]
         [TestCase("Integrated Fuel/Engine Indicator (IFEI)", "IFEI_BINGO", "display", null, null)]
         [TestCase("Radar Altimeter", "RADALT_HEIGHT", "analog_dial", null, null)]
+        [TestCase("Radar Altimeter", "FAKE_CONTROL", "analog_dial", null, null)]
         public void ReadGoodConfiguration(string categoryName, string controlName, string controlType, string momentaryPositions, string phsyicalVariant)
         {
             var cat = _hornetConfiguration[categoryName];
