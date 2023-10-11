@@ -311,6 +311,23 @@
                 "value": "foo_bar",
                 "type": "this_does_not_exist_either"
             } ]
+        },
+        "STRING_INPUT_CONTROL": {
+            "category": "Radar Altimeter",
+            "control_type": "radio",
+            "description": "Input a string",
+            "identifier": "STRING_INPUT_CONTROL",
+            "inputs": [ {
+                "description": "set the radio frequency",
+                "interface": "set_string"
+            } ],
+            "outputs": [ {
+                "address": 29976,
+                "description": "radio frequency",
+                "max_length": 7,
+                "suffix": "",
+                "type": "string"
+            } ]
         }
     }
 }

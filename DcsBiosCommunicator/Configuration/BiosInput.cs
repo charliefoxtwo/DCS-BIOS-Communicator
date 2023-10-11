@@ -17,6 +17,7 @@ public abstract record BiosInput
         [InputSetState.InterfaceType] = typeof(InputSetState),
         [InputAction.InterfaceType] = typeof(InputAction),
         [InputVariableStep.InterfaceType] = typeof(InputVariableStep),
+        [InputSetString.InterfaceType] = typeof(InputSetString),
     };
 
     public static Type GetTypeForType(in string type)
