@@ -294,6 +294,40 @@
                 "suffix": "_KNOB_POS",
                 "type": "integer"
             } ]
+        },
+        "FAKE_CONTROL": {
+            "category": "Radar Altimeter",
+            "control_type": "analog_dial",
+            "description": "Set low altitude pointer",
+            "identifier": "FAKE_CONTROL",
+            "inputs": [ {
+                "description": "turn the dial left or right",
+                "interface": "this_does_not_exist",
+                "some_value": 65535,
+                "something_else": "hey now brown cow"
+            } ],
+            "outputs": [ {
+                "address": 29975,
+                "value": "foo_bar",
+                "type": "this_does_not_exist_either"
+            } ]
+        },
+        "STRING_INPUT_CONTROL": {
+            "category": "Radar Altimeter",
+            "control_type": "radio",
+            "description": "Input a string",
+            "identifier": "STRING_INPUT_CONTROL",
+            "inputs": [ {
+                "description": "set the radio frequency",
+                "interface": "set_string"
+            } ],
+            "outputs": [ {
+                "address": 29976,
+                "description": "radio frequency",
+                "max_length": 7,
+                "suffix": "",
+                "type": "string"
+            } ]
         }
     }
 }

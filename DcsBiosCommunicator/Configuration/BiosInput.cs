@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using DcsBios.Communicator.Configuration.JsonConverters;
 using Newtonsoft.Json;
 
-namespace DcsBios.Communicator.Configuration
+namespace DcsBios.Communicator.Configuration;
+
+[JsonConverter(typeof(InputConverter))]
+public abstract record BiosInput
 {
-    [JsonConverter(typeof(InputConverter))]
-    public abstract record BiosInput
+    // TODO: enumify
+    public string Interface { get; set; } = null!;
+
+    private static readonly Dictionary<string, Type> Types = new()
     {
-        // TODO: enumify
-        public string Interface { get; set; } = null!;
+        [InputFixedStep.InterfaceType] = typeof(InputFixedStep),
+        [InputSetState.InterfaceType] = typeof(InputSetState),
+        [InputAction.InterfaceType] = typeof(InputAction),
+        [InputVariableStep.InterfaceType] = typeof(InputVariableStep),
+        [InputSetString.InterfaceType] = typeof(InputSetString),
+    };
 
-        private static readonly Dictionary<string, Type> Types = new()
-        {
-            [InputFixedStep.InterfaceType] = typeof(InputFixedStep),
-            [InputSetState.InterfaceType] = typeof(InputSetState),
-            [InputAction.InterfaceType] = typeof(InputAction),
-            [InputVariableStep.InterfaceType] = typeof(InputVariableStep),
-        };
-
-        public static Type GetTypeForType(in string type)
-        {
-            return Types[type];
-        }
+    public static Type GetTypeForType(in string type)
+    {
+        return Types.TryGetValue(type, out var result) ? result : typeof(InputUnknown);
     }
 }
