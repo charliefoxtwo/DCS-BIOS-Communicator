@@ -40,6 +40,22 @@ biosListener.Start();
 
 ```
 
+## Benchmarks
+Benchmarks are strictly for parsing data received from the UDP server and do not include network time or UDP receive time.
+```
+BenchmarkDotNet v0.13.12, Windows 11
+AMD Ryzen 9 5900X, 1 CPU, 24 logical and 12 physical cores
+.NET SDK 8.0.206
+
+Job=.NET 8.0  Runtime=.NET 8.0
+```
+| Method     | Mean      | Error     | StdDev    | Ratio |
+|----------- |----------:|----------:|----------:|------:|
+| TestString | 30.043 ns | 0.1793 ns | 0.1677 ns |  1.00 |
+|            |           |           |           |       |
+| TestInt    |  1.290 ns | 0.0114 ns | 0.0106 ns |  1.00 |
+
+
 
 ## Roadmap
 
