@@ -4,5 +4,5 @@ public record OutputString : BiosOutput
 {
     public static string OutputType => "string";
 
-    public int MaxLength { get; set; }
+    public byte MaxLength { get; set; }
 }

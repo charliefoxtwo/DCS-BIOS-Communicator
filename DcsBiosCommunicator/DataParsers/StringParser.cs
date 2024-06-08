@@ -6,14 +6,14 @@ public sealed class StringParser : DataParser<string>
 {
     public bool DataReady => _bufferFilledBits == _bufferSizeBits;
 
-    public int Length { get; }
+    public byte Length { get; }
     private readonly byte[] _buffer;
     private readonly long _bufferSizeBits;
     private long _bufferFilledBits;
 
-    private readonly int _baseAddress;
+    private readonly ushort _baseAddress;
 
-    public StringParser(in int address, in int length, in string biosCode) : base(address, biosCode)
+    public StringParser(in ushort address, in byte length, in string biosCode) : base(address, biosCode)
     {
         if (length is < 1 or > 64)
             throw new ArgumentOutOfRangeException(nameof(length), length,
@@ -43,7 +43,7 @@ public sealed class StringParser : DataParser<string>
     /// <param name="address">BIOS Address the data came from</param>
     /// <param name="data">Data received at the provided BIOS address</param>
     /// <returns></returns>
-    public override void AddData(in int address, in int data)
+    public override void AddData(in ushort address, in ushort data)
     {
         var b1 = (byte) (data & 0xFF);
         var b2 = (byte) (data >> 8);

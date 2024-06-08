@@ -125,7 +125,7 @@ public class BiosListener : IDisposable
         _moduleStringActions[module] = moduleParsers;
     }
 
-    private void OnBiosDataReceived(int address, int data)
+    private void OnBiosDataReceived(ushort address, ushort data)
     {
         _log.LogTrace("{Address:x4} -> got data -> {Data:x4}", address, data);
 
@@ -158,7 +158,7 @@ public class BiosListener : IDisposable
         }
     }
 
-    private void ProcessStringData(StringParser parser, int address, int data)
+    private void ProcessStringData(StringParser parser, ushort address, ushort data)
     {
         _log.LogTrace("{Address:x4} -> got string data -> {Data:x4}", address, data);
 

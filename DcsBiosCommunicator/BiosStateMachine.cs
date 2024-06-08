@@ -22,11 +22,11 @@ internal class BiosStateMachine
 
     private State _state = State.WaitForSync;
     private int _syncByteCount;
-    private int _address;
-    private int _count;
-    private int _data;
+    private ushort _address;
+    private ushort _count;
+    private ushort _data;
 
-    public delegate void DataWriteDelegate(int address, int data);
+    public delegate void DataWriteDelegate(ushort address, ushort data);
     public delegate void FrameSyncDelegate();
 
     public event DataWriteDelegate? OnDataWrite;
@@ -79,7 +79,7 @@ internal class BiosStateMachine
 
     private void AddressHigh(byte data)
     {
-        _address += data << 8;
+        _address += (ushort)(data << 8);
         _state = _address == 0x5555 ? State.WaitForSync : State.CountLow;
     }
 
@@ -91,7 +91,7 @@ internal class BiosStateMachine
 
     private void CountHigh(byte data)
     {
-        _count += data << 8;
+        _count += (ushort)(data << 8);
         _state = State.DataLow;
     }
 
@@ -104,7 +104,7 @@ internal class BiosStateMachine
 
     private void DataHigh(byte data)
     {
-        _data += data << 8;
+        _data += (ushort)(data << 8);
         _count -= 1;
 
         _log.LogTrace("Sending {Data:x4} to {Address:x4}", _data, _address);
