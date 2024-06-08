@@ -14,10 +14,5 @@ public class BiosControl
     public string Identifier { get; set; } = null!;
     public List<BiosInput> Inputs { get; set; } = null!;
 
-    // TODO: enumify
-    public string MomentaryPositions { get; set; } = null!;
     public List<BiosOutput> Outputs { get; set; } = null!;
-
-    // TODO: enumify
-    public string PhysicalVariant { get; set; } = null!;
 }

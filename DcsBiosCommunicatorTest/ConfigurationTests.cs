@@ -354,29 +354,27 @@ public class ConfigurationTests
     };
 
     [Theory]
-    [TestCase("AMPCD", "AMPCD_BRT_CTL", "limited_dial", null, null)]
-    [TestCase("AMPCD", "AMPCD_CONT_SW", "selector", "none", "3_position_switch")]
-    [TestCase("AMPCD", "AMPCD_PB_01", "selector", "none", "push_button")]
-    [TestCase("APU Fire Warning Extinguisher Light", "FIRE_APU_LT", "led", null, null)]
-    [TestCase("Auxiliary Power Unit Panel", "APU_CONTROL_SW", "toggle_switch", null, null)]
-    [TestCase("Auxiliary Power Unit Panel", "ENGINE_CRANK_SW", "selector", "first_and_last", "rocker_switch")]
-    [TestCase("Clock", "CLOCK_ELAPSED_MINUTES", "analog_gauge", null, null)]
-    [TestCase("Ejection Seat", "EJECTION_HANDLE_SW", "toggle_switch", null, null)]
-    [TestCase("Environment Control System Panel", "BLEED_AIR_KNOB", "selector", "none", "infinite_rotary")]
-    [TestCase("HUD Control Panel", "HUD_VIDEO_CONTROL_SW", "selector", "none", "limited_rotary")]
-    [TestCase("Integrated Fuel/Engine Indicator (IFEI)", "IFEI_BINGO", "display", null, null)]
-    [TestCase("Radar Altimeter", "RADALT_HEIGHT", "analog_dial", null, null)]
-    [TestCase("Radar Altimeter", "FAKE_CONTROL", "analog_dial", null, null)]
-    [TestCase("Radar Altimeter", "STRING_INPUT_CONTROL", "radio", null, null)]
-    public void ReadGoodConfiguration(string categoryName, string controlName, string controlType, string momentaryPositions, string physicalVariant)
+    [TestCase("AMPCD", "AMPCD_BRT_CTL", "limited_dial")]
+    [TestCase("AMPCD", "AMPCD_CONT_SW", "selector")]
+    [TestCase("AMPCD", "AMPCD_PB_01", "selector")]
+    [TestCase("APU Fire Warning Extinguisher Light", "FIRE_APU_LT", "led")]
+    [TestCase("Auxiliary Power Unit Panel", "APU_CONTROL_SW", "toggle_switch")]
+    [TestCase("Auxiliary Power Unit Panel", "ENGINE_CRANK_SW", "selector")]
+    [TestCase("Clock", "CLOCK_ELAPSED_MINUTES", "analog_gauge")]
+    [TestCase("Ejection Seat", "EJECTION_HANDLE_SW", "toggle_switch")]
+    [TestCase("Environment Control System Panel", "BLEED_AIR_KNOB", "selector")]
+    [TestCase("HUD Control Panel", "HUD_VIDEO_CONTROL_SW", "selector")]
+    [TestCase("Integrated Fuel/Engine Indicator (IFEI)", "IFEI_BINGO", "display")]
+    [TestCase("Radar Altimeter", "RADALT_HEIGHT", "analog_dial")]
+    [TestCase("Radar Altimeter", "FAKE_CONTROL", "analog_dial")]
+    [TestCase("Radar Altimeter", "STRING_INPUT_CONTROL", "radio")]
+    public void ReadGoodConfiguration(string categoryName, string controlName, string controlType)
     {
         var cat = _hornetConfiguration[categoryName];
         var ctrl = cat[controlName];
         Assert.AreEqual(categoryName, ctrl.Category);
         Assert.AreEqual(controlName, ctrl.Identifier);
         Assert.AreEqual(controlType, ctrl.ControlType);
-        Assert.AreEqual(momentaryPositions, ctrl.MomentaryPositions);
-        Assert.AreEqual(physicalVariant, ctrl.PhysicalVariant);
 
         var (inputs, outputs) = _io[controlName];
 
