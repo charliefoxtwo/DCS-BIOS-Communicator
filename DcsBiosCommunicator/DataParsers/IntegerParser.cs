@@ -3,16 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DcsBios.Communicator.DataParsers;
 
-public class IntegerParser : DataParser<int>
+public class IntegerParser(in ushort mask, [Range(0, 15)] in byte shift, in string biosCode)
+    : DataParser<int>(default, biosCode)
 {
-    private readonly ushort _mask;
-    private readonly byte _shift;
-
-    public IntegerParser(in ushort mask, [Range(0, 15)] in byte shift, in string biosCode) : base(default, biosCode)
-    {
-        _mask = mask;
-        _shift = shift;
-    }
+    private readonly ushort _mask = mask;
+    private readonly byte _shift = shift;
 
     public override void AddData(in ushort address, in ushort data)
     {

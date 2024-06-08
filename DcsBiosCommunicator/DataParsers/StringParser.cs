@@ -1,29 +1,19 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DcsBios.Communicator.DataParsers;
 
-public sealed class StringParser : DataParser<string>
+public sealed class StringParser(in ushort address, [Range(1, 64)] in byte length, in string biosCode)
+    : DataParser<string>(address, biosCode)
 {
     public bool DataReady => _bufferFilledBits == _bufferSizeBits;
 
-    public byte Length { get; }
-    private readonly byte[] _buffer;
-    private readonly long _bufferSizeBits;
+    public byte Length { get; } = length;
+    private readonly byte[] _buffer = new byte[length];
+    private readonly long _bufferSizeBits = (2L << (length - 1)) - 1;
     private long _bufferFilledBits;
 
-    private readonly ushort _baseAddress;
-
-    public StringParser(in ushort address, in byte length, in string biosCode) : base(address, biosCode)
-    {
-        if (length is < 1 or > 64)
-            throw new ArgumentOutOfRangeException(nameof(length), length,
-                $"Length of {biosCode} should be between 1 and 64, inclusive.");
-
-        Length = length;
-        _buffer = new byte[length];
-        _bufferSizeBits = (2L << (length - 1)) - 1;
-        _baseAddress = address;
-    }
+    private readonly ushort _baseAddress = address;
 
     private bool SetCharacter(int index, byte b)
     {
