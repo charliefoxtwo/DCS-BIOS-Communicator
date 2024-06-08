@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Linq;
 
 namespace DcsBios.Communicator.DataParsers
 {
     public sealed class StringParser : DataParser<string>
     {
-        public bool DataReady { get; private set; }
+        public bool DataReady => _bufferFilledBits == _bufferSizeBits;
 
         public int Length { get; }
-        private readonly char[] _buffer;
+        private readonly byte[] _buffer;
         private readonly long _bufferSizeBits;
         private long _bufferFilledBits;
 
-        private bool BufferFilled => _bufferFilledBits == _bufferSizeBits;
+        private readonly int _baseAddress;
 
         public StringParser(in int address, in int length, in string biosCode) : base(address, biosCode)
         {
@@ -21,16 +20,21 @@ namespace DcsBios.Communicator.DataParsers
                     $"Length of {biosCode} should be between 1 and 64, inclusive.");
 
             Length = length;
-            _buffer = new char[length];
-            _bufferSizeBits = (long) Math.Pow(2, length) - 1;
+            _buffer = new byte[length];
+            _bufferSizeBits = (2L << (length - 1)) - 1;
+            _baseAddress = address;
         }
 
-        private void SetCharacter(int index, char ch)
+        private bool SetCharacter(int index, byte b)
         {
-            DataReady = false;
-            _buffer[index] = ch;
+            _buffer[index] = b;
 
-            if (!BufferFilled) _bufferFilledBits |= (long) Math.Pow(2, index);
+            if (!DataReady)
+            {
+                _bufferFilledBits |= index > 0 ? 2L << (index - 1) : 1L;
+            }
+
+            return index + 1 == Length;
         }
 
         /// <summary>
@@ -41,25 +45,24 @@ namespace DcsBios.Communicator.DataParsers
         /// <returns></returns>
         public override void AddData(in int address, in int data)
         {
-            var done = false;
-            if (Address <= address && address < Address + Length)
+            var b1 = (byte) (data & 0xFF);
+            var b2 = (byte) (data >> 8);
+
+            var offset = address - _baseAddress;
+
+            var done = SetCharacter(offset, b1);
+            if (!done)
             {
-                var dataBytes = BitConverter.GetBytes(data).Select(d => (char)d).Take(2).ToArray();
-                SetCharacter(address - Address, dataBytes[0]);
-                if (address - Address + 1 == Length) done = true;
-                if (Address + Length > address + 1)
-                {
-                    if (address - Address + 2 == Length) done = true;
-                    SetCharacter(address - Address + 1, dataBytes[1]);
-                }
+                SetCharacter(offset + 1, b2);
             }
 
-            if (done && BufferFilled)
-            {
-                DataReady = true;
-            }
+            if (!DataReady) return;
 
-            CurrentValue = string.Concat(_buffer);
+            var newValue = System.Text.Encoding.UTF8.GetString(_buffer);
+            if (newValue != CurrentValue)
+            {
+                CurrentValue = newValue;
+            }
         }
     }
 }
