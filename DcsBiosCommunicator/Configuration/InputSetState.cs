@@ -1,9 +1,8 @@
-﻿namespace DcsBios.Communicator.Configuration
-{
-    public record InputSetState : BiosInput
-    {
-        public const string InterfaceType = "set_state";
+﻿namespace DcsBios.Communicator.Configuration;
 
-        public int MaxValue { get; set; }
-    }
+public record InputSetState : BiosInput
+{
+    public const string InterfaceType = "set_state";
+
+    public int MaxValue { get; set; }
 }

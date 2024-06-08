@@ -2,18 +2,17 @@
 using System.Linq;
 using DcsBios.Communicator.DataParsers;
 
-namespace DcsBios.Communicator
+namespace DcsBios.Communicator;
+
+internal class IntegerHandler
 {
-    internal class IntegerHandler
+    public int Address { get; }
+
+    public IList<IntegerParser> MaskShifts { get; }
+
+    public IntegerHandler(in int address, IEnumerable<IntegerParser> maskShifts)
     {
-        public int Address { get; }
-
-        public IList<IntegerParser> MaskShifts { get; }
-
-        public IntegerHandler(in int address, IEnumerable<IntegerParser> maskShifts)
-        {
-            Address = address;
-            MaskShifts = maskShifts.ToList();
-        }
+        Address = address;
+        MaskShifts = maskShifts.ToList();
     }
 }

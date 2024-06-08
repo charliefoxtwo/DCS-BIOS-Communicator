@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace DcsBios.Communicator
+namespace DcsBios.Communicator;
+
+public interface IBiosSendClient
 {
-    public interface IBiosSendClient
-    {
-        Task Send(string address, string data);
-    }
+    Task Send(string address, string data);
 }
