@@ -1,27 +1,16 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace DcsBios.Communicator.DataParsers
+namespace DcsBios.Communicator.DataParsers;
+
+public class IntegerParser(in ushort mask, [Range(0, 15)] in byte shift, in string biosCode)
+    : DataParser<int>(default, biosCode)
 {
-    public class IntegerParser : DataParser<int>
+    private readonly ushort _mask = mask;
+    private readonly byte _shift = shift;
+
+    public override void AddData(in ushort address, in ushort data)
     {
-        private readonly int _mask;
-        private readonly int _shift;
-
-        public IntegerParser(in int mask, in string biosCode) : base(default, biosCode)
-        {
-            _mask = mask;
-            _shift = (int) Math.Log2(mask);
-        }
-
-        public IntegerParser(in int mask, in int shift, in string biosCode) : base(default, biosCode)
-        {
-            _mask = mask;
-            _shift = shift;
-        }
-
-        public override void AddData(in int address, in int data)
-        {
-            CurrentValue = (data & _mask) >> _shift;
-        }
+        CurrentValue = (data & _mask) >> _shift;
     }
 }

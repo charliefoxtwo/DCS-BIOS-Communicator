@@ -10,7 +10,7 @@ namespace DcsBios.Communicator.Configuration;
 [JsonConverter(typeof(OutputConverter))]
 public abstract record BiosOutput
 {
-    public int Address { get; set; }
+    public ushort Address { get; set; }
 
     public string Suffix { get; set; } = null!;
 

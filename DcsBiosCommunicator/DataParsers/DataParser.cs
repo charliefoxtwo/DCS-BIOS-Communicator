@@ -1,19 +1,12 @@
-﻿namespace DcsBios.Communicator.DataParsers
+﻿namespace DcsBios.Communicator.DataParsers;
+
+public abstract class DataParser<T>(in ushort address, in string biosCode)
 {
-    public abstract class DataParser<T>
-    {
-        public int Address { get; }
+    public ushort Address { get; } = address;
 
-        public string BiosCode { get; }
+    public string BiosCode { get; } = biosCode;
 
-        public T CurrentValue { get; protected set; } = default!;
+    public T CurrentValue { get; protected set; } = default!;
 
-        protected DataParser(in int address, in string biosCode)
-        {
-            Address = address;
-            BiosCode = biosCode;
-        }
-
-        public abstract void AddData(in int address, in int data);
-    }
+    public abstract void AddData(in ushort address, in ushort data);
 }
