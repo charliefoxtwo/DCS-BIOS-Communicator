@@ -9,7 +9,7 @@
         <Title>DCS-BIOS Communicator</Title>
         <Authors>charliefoxtwo</Authors>
         <Description>Provides methods and classes for subscribing to DCS-BIOS events.</Description>
-        <PackageVersion>4.1.0</PackageVersion>
+        <PackageVersion>5.0.0</PackageVersion>
         <PackageProjectUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</PackageProjectUrl>
         <PackageLicenseUrl>https://www.gnu.org/licenses/gpl-3.0.en.html</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</RepositoryUrl>
@@ -17,10 +17,11 @@
         <PackageTags>dcs</PackageTags>
         <PackageIcon>airplane.png</PackageIcon>
         <PackageIconUrl>https://raw.githubusercontent.com/charliefoxtwo/DCS-BIOS-Communicator/main/DcsBiosCommunicator/resources/airplane.png</PackageIconUrl>
-        <PackageReleaseNotes> - fix exception thrown on unrecognized input/output types
- - add support for string inputs</PackageReleaseNotes>
-        <AssemblyVersion>4.1.0</AssemblyVersion>
-        <FileVersion>4.1.0</FileVersion>
+        <PackageReleaseNotes>- improve string parsing efficiency
+- remove deprecated bios fields
+- upgrade to .NET 8</PackageReleaseNotes>
+        <AssemblyVersion>5.0.0</AssemblyVersion>
+        <FileVersion>5.0.0</FileVersion>
         <LangVersion>default</LangVersion>
     </PropertyGroup>
 
