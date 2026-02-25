@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using DcsBios.Communicator.Configuration;
@@ -9,11 +10,13 @@ namespace DcsBiosCommunicatorTest;
 public class ConfigurationTests
 {
     private readonly AircraftBiosConfiguration _hornetConfiguration;
+    private readonly AircraftBiosConfiguration _testConfiguration;
     public ConfigurationTests()
     {
         const string goodPath = "Resources/Good";
         var r = AircraftBiosConfiguration.AllConfigurations("AircraftAliases.json", null, goodPath).Result;
-        _hornetConfiguration = r.Single();
+        _hornetConfiguration = r.Single(c => c.AircraftName == "FA-18C_hornet");
+        _testConfiguration = r.Single(c => c.AircraftName == "Tests");
     }
 
     // a bad configuration should not throw or crash
@@ -380,5 +383,38 @@ public class ConfigurationTests
 
         CollectionAssert.AreEquivalent(inputs, ctrl.Inputs);
         CollectionAssert.AreEquivalent(outputs, ctrl.Outputs);
+    }
+
+    [TestCase("DEPRECATED", "1.2.3", null, "MULTI_POS_SWITCH")]
+    public void ReadDeprecated(string controlName, string? since, string? description, string? useInstead)
+    {
+        var cat = _testConfiguration["Deprecated"];
+        var ctrl = cat[controlName];
+        Assert.That(ctrl.Deprecated, Is.Not.Null);
+
+        Debug.Assert(ctrl.Deprecated is not null);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(ctrl.Deprecated.Since, Is.EqualTo(since));
+            Assert.That(ctrl.Deprecated.Description, Is.EqualTo(description));
+            Assert.That(ctrl.Deprecated.UseInstead, Is.EqualTo(useInstead));
+        });
+    }
+
+    [TestCase("MULTI_POS_SWITCH", "LEFT", "OFF", "RIGHT")]
+    public void ReadPositions(string controlName, params string[] positions)
+    {
+        var cat = _testConfiguration["Positions"];
+        var ctrl = cat[controlName];
+        Assert.That(ctrl.Positions, Is.EquivalentTo(positions));
+    }
+
+    [TestCase("LED_INDICATOR", "green")]
+    public void ReadColor(string controlName, string color)
+    {
+        var cat = _testConfiguration["Colors"];
+        var ctrl = cat[controlName];
+        Assert.That(ctrl.Color, Is.EqualTo(color));
     }
 }

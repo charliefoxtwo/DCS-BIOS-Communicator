@@ -1,0 +1,38 @@
+﻿{
+    "Deprecated": {
+        "DEPRECATED": {
+            "category": "Deprecated",
+            "control_type": "selector",
+            "deprecated": {
+                "since": "1.2.3",
+                "use_instead": "MULTI_POS_SWITCH"
+            },
+            "description": "DEPRECATED",
+            "identifier": "DEPRECATED",
+            "inputs": [],
+            "outputs": []
+        }
+    },
+    "Positions": {
+        "MULTI_POS_SWITCH": {
+            "category": "Positions",
+            "control_type": "selector",
+            "description": "Engine Crank Switch",
+            "identifier": "MULTI_POS_SWITCH",
+            "inputs": [],
+            "outputs": [],
+            "positions": ["LEFT", "OFF", "RIGHT"]
+        }
+    },
+    "Colors": {
+        "LED_INDICATOR": {
+            "category": "Colors",
+            "color": "green",
+            "control_type": "led",
+            "description": "LED",
+            "identifier": "LED_INDICATOR",
+            "inputs": [],
+            "outputs": []
+        }
+    }
+}

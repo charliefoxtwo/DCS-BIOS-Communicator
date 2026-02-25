@@ -6,6 +6,8 @@
         <IsPackable>false</IsPackable>
 
         <LangVersion>default</LangVersion>
+
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,6 +30,10 @@
       </EmbeddedResource>
       <None Remove="Resources\Good\hornet2.json" />
       <EmbeddedResource Include="Resources\Good\FA-18C_hornet.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Resources\Good\Tests.json" />
+      <EmbeddedResource Include="Resources\Good\Tests.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>

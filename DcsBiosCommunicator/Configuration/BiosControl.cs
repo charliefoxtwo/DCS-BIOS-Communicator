@@ -15,4 +15,8 @@ public class BiosControl
     public List<BiosInput> Inputs { get; set; } = null!;
 
     public List<BiosOutput> Outputs { get; set; } = null!;
+
+    public DeprecatedAttribute? Deprecated { get; init; }
+    public List<string>? Positions { get; init; }
+    public string? Color { get; init; }
 }
