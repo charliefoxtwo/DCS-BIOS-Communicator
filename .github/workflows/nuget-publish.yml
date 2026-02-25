@@ -8,12 +8,12 @@ jobs:
     name: build, pack & publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v14
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 8.0.206
+          dotnet-version: 10.x
 
       # Publish
       - name: publish on version change
