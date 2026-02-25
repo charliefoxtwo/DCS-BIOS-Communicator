@@ -38,7 +38,7 @@ public class ConfigurationTests
     public void TestAliases()
     {
         var expectedAliases = new HashSet<string> { "EA-18G", "FA-18C_hornet", "FA-18E", "FA-18F" };
-        CollectionAssert.AreEquivalent(expectedAliases, _hornetConfiguration.Aliases.Intersect(expectedAliases).ToHashSet());
+        Assert.That(_hornetConfiguration.Aliases.Intersect(expectedAliases).ToHashSet(), Is.EquivalentTo(expectedAliases));
     }
 
 
@@ -381,8 +381,8 @@ public class ConfigurationTests
 
         var (inputs, outputs) = _io[controlName];
 
-        CollectionAssert.AreEquivalent(inputs, ctrl.Inputs);
-        CollectionAssert.AreEquivalent(outputs, ctrl.Outputs);
+        Assert.That(ctrl.Inputs, Is.EquivalentTo(inputs));
+        Assert.That(ctrl.Outputs, Is.EquivalentTo(outputs));
     }
 
     [TestCase("DEPRECATED", "1.2.3", null, "MULTI_POS_SWITCH")]
