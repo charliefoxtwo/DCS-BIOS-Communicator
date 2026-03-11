@@ -209,6 +209,7 @@ public class BiosListener : IDisposable
         _log.LogDebug("Stopping DCS-BIOS listener...");
         _cts.Cancel();
         _delegateThread?.Wait();
+        _delegateThread = null;
         _log.LogInformation("DCS-BIOS listener stopped");
     }
 
@@ -219,7 +220,7 @@ public class BiosListener : IDisposable
             try
             {
                 _log.LogTrace("awaiting bios data...");
-                var data = await _client.ReceiveAsync();
+                var data = await _client.ReceiveAsync(ctx);
                 _log.LogTrace("bios data received of length {DataLength}", data.Buffer.Length);
                 _parser.ProcessBytes(data.Buffer);
             }

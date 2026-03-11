@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
@@ -34,9 +35,9 @@ public class BiosUdpClient : IUdpReceiveClient, IBiosSendClient, IDisposable
         _client.Client.Bind(localEndpoint);
     }
 
-    public async Task<UdpReceiveResult> ReceiveAsync()
+    public async Task<UdpReceiveResult> ReceiveAsync(CancellationToken ctx = default)
     {
-        return await _client.ReceiveAsync();
+        return await _client.ReceiveAsync(ctx);
     }
 
     public async Task Send(string biosAddress, string data)
@@ -71,5 +72,5 @@ public class BiosUdpClient : IUdpReceiveClient, IBiosSendClient, IDisposable
 
 public interface IUdpReceiveClient
 {
-    Task<UdpReceiveResult> ReceiveAsync();
+    Task<UdpReceiveResult> ReceiveAsync(CancellationToken ctx = default);
 }
