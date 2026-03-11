@@ -224,6 +224,10 @@ public class BiosListener : IDisposable
                 _log?.LogTrace("bios data received of length {DataLength}", data.Buffer.Length);
                 _parser.ProcessBytes(data.Buffer);
             }
+            catch (OperationCanceledException)
+            {
+                _log?.LogInformation("listener closed");
+            }
             catch (Exception ex)
             {
                 _log?.LogCritical("Critical exception in Bios Listener: {Exception}", ex);
