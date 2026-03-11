@@ -195,7 +195,7 @@ public class BiosListener : IDisposable
         }
         else
         {
-            _delegateThread = Listener(_cts.Token);
+            _delegateThread = Task.Run(async () => await Listener(_cts.Token), _cts.Token);
         }
 
         _log?.LogInformation("DCS-BIOS listener started");
