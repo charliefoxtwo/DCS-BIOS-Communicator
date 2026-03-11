@@ -195,7 +195,7 @@ public class BiosListener : IDisposable
         }
         else
         {
-            _delegateThread = Listener(_cts.Token);
+            _delegateThread = Task.Run(async () => await Listener(_cts.Token), _cts.Token);
         }
 
         _log?.LogInformation("DCS-BIOS listener started");
@@ -223,6 +223,10 @@ public class BiosListener : IDisposable
                 var data = await _client.ReceiveAsync(ctx);
                 _log?.LogTrace("bios data received of length {DataLength}", data.Buffer.Length);
                 _parser.ProcessBytes(data.Buffer);
+            }
+            catch (OperationCanceledException)
+            {
+                _log?.LogInformation("listener closed");
             }
             catch (Exception ex)
             {
