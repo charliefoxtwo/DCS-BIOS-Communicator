@@ -17,10 +17,10 @@
         <PackageTags>dcs</PackageTags>
         <PackageIcon>airplane.png</PackageIcon>
         <PackageIconUrl>https://raw.githubusercontent.com/charliefoxtwo/DCS-BIOS-Communicator/main/DcsBiosCommunicator/resources/airplane.png</PackageIconUrl>
-        <PackageReleaseNotes>- add new dcs-bios fields
-- upgrade to .NET 10</PackageReleaseNotes>
-        <AssemblyVersion>6.0.0</AssemblyVersion>
-        <FileVersion>6.0.0</FileVersion>
+        <PackageReleaseNotes>- add cancellation token to ReceiveAsync
+- allow loggers to be null</PackageReleaseNotes>
+        <AssemblyVersion>7.0.0</AssemblyVersion>
+        <FileVersion>7.0.0</FileVersion>
         <LangVersion>default</LangVersion>
     </PropertyGroup>
 

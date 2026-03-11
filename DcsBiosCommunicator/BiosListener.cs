@@ -25,9 +25,9 @@ public class BiosListener : IDisposable
     private readonly CancellationTokenSource _cts = new();
 
     private readonly IBiosTranslator _biosTranslator;
-    private readonly ILogger<BiosListener> _log;
+    private readonly ILogger<BiosListener>? _log;
 
-    public BiosListener(in IUdpReceiveClient client, in IBiosTranslator biosTranslator, in ILogger<BiosListener> logger)
+    public BiosListener(in IUdpReceiveClient client, in IBiosTranslator biosTranslator, in ILogger<BiosListener>? logger)
     {
         _client = client;
         _biosTranslator = biosTranslator;
@@ -38,7 +38,7 @@ public class BiosListener : IDisposable
 
     public void RegisterConfiguration(AircraftBiosConfiguration configuration)
     {
-        _log.LogDebug("Loading config for module {Module}", configuration.AircraftName);
+        _log?.LogDebug("Loading config for module {Module}", configuration.AircraftName);
         foreach (var control in configuration.Values.SelectMany(c => c.Values))
         {
             RegisterControl(configuration.AircraftName, control);
@@ -49,7 +49,7 @@ public class BiosListener : IDisposable
     {
         foreach (var output in control.Outputs)
         {
-            _log.LogTrace("Registering control {Control} at {Address}", control.Identifier, output.Address);
+            _log?.LogTrace("Registering control {Control} at {Address}", control.Identifier, output.Address);
 
             switch (output)
             {
@@ -60,7 +60,7 @@ public class BiosListener : IDisposable
                     RegisterStringControl(module, control, so);
                     break;
                 default:
-                    _log.LogCritical("invalid control output type {OutputType}", output.GetType());
+                    _log?.LogCritical("invalid control output type {OutputType}", output.GetType());
                     throw new ArgumentException($"invalid output type: {output.GetType()}");
             }
         }
@@ -127,14 +127,14 @@ public class BiosListener : IDisposable
 
     private void OnBiosDataReceived(ushort address, ushort data)
     {
-        _log.LogTrace("{Address:x4} -> got data -> {Data:x4}", address, data);
+        _log?.LogTrace("{Address:x4} -> got data -> {Data:x4}", address, data);
 
         if (_activeAircraft is not null &&
             _moduleIntegerActions.TryGetValue(_activeAircraft, out var integerActions) &&
             integerActions.TryGetValue(address, out var handler) ||
             _integerActions.TryGetValue(address, out handler))
         {
-            _log.LogTrace("{Address:x4} -> got int data -> {Data:x4}", address, data);
+            _log?.LogTrace("{Address:x4} -> got int data -> {Data:x4}", address, data);
             foreach (var mask in handler.MaskShifts)
             {
                 mask.AddData(address, data);
@@ -160,7 +160,7 @@ public class BiosListener : IDisposable
 
     private void ProcessStringData(StringParser parser, ushort address, ushort data)
     {
-        _log.LogTrace("{Address:x4} -> got string data -> {Data:x4}", address, data);
+        _log?.LogTrace("{Address:x4} -> got string data -> {Data:x4}", address, data);
 
         parser.AddData(address, data);
 
@@ -174,7 +174,7 @@ public class BiosListener : IDisposable
             if (_activeAircraft != result)
             {
                 _activeAircraft = result;
-                _log.LogInformation("New aircraft detected -> {{{ActiveAircraft}}}", _activeAircraft);
+                _log?.LogInformation("New aircraft detected -> {{{ActiveAircraft}}}", _activeAircraft);
             }
         }
 
@@ -183,22 +183,22 @@ public class BiosListener : IDisposable
 
     public void Start()
     {
-        _log.LogDebug("Starting DCS-BIOS listener...");
+        _log?.LogDebug("Starting DCS-BIOS listener...");
 
         if (_delegateThread is not null)
         {
-            _log.LogWarning("DCS-BIOS listener thread already started");
+            _log?.LogWarning("DCS-BIOS listener thread already started");
         }
         else if (_cts.IsCancellationRequested)
         {
-            _log.LogWarning("DCS-BIOS listener cancellation requested, aborting start...");
+            _log?.LogWarning("DCS-BIOS listener cancellation requested, aborting start...");
         }
         else
         {
             _delegateThread = Listener(_cts.Token);
         }
 
-        _log.LogInformation("DCS-BIOS listener started");
+        _log?.LogInformation("DCS-BIOS listener started");
     }
 
     /// <summary>
@@ -206,10 +206,11 @@ public class BiosListener : IDisposable
     /// </summary>
     public void Stop()
     {
-        _log.LogDebug("Stopping DCS-BIOS listener...");
+        _log?.LogDebug("Stopping DCS-BIOS listener...");
         _cts.Cancel();
         _delegateThread?.Wait();
-        _log.LogInformation("DCS-BIOS listener stopped");
+        _delegateThread = null;
+        _log?.LogInformation("DCS-BIOS listener stopped");
     }
 
     private async Task Listener(CancellationToken ctx)
@@ -218,19 +219,19 @@ public class BiosListener : IDisposable
         {
             try
             {
-                _log.LogTrace("awaiting bios data...");
-                var data = await _client.ReceiveAsync();
-                _log.LogTrace("bios data received of length {DataLength}", data.Buffer.Length);
+                _log?.LogTrace("awaiting bios data...");
+                var data = await _client.ReceiveAsync(ctx);
+                _log?.LogTrace("bios data received of length {DataLength}", data.Buffer.Length);
                 _parser.ProcessBytes(data.Buffer);
             }
             catch (Exception ex)
             {
-                _log.LogCritical("Critical exception in Bios Listener: {Exception}", ex);
+                _log?.LogCritical("Critical exception in Bios Listener: {Exception}", ex);
                 throw;
             }
         }
 
-        _log.LogWarning("Stopping DCS-BIOS Listener...");
+        _log?.LogWarning("Stopping DCS-BIOS Listener...");
     }
 
     public void Dispose()
