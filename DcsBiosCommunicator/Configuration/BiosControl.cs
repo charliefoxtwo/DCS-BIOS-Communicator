@@ -5,18 +5,13 @@
 namespace DcsBios.Communicator.Configuration;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class BiosControl
-{
-    public string Category { get; set; } = null!;
-
-    // TODO: enumify
-    public string ControlType { get; set; } = null!;
-    public string Identifier { get; set; } = null!;
-    public List<BiosInput> Inputs { get; set; } = null!;
-
-    public List<BiosOutput> Outputs { get; set; } = null!;
-
-    public DeprecatedAttribute? Deprecated { get; init; }
-    public List<string>? Positions { get; init; }
-    public string? Color { get; init; }
-}
+public record BiosControl(
+    string Category,
+    string ControlType,
+    string Identifier,
+    string Description,
+    List<BiosInput> Inputs,
+    List<BiosOutput> Outputs,
+    DeprecatedAttribute? Deprecated,
+    List<string>? Positions,
+    string? Color);
