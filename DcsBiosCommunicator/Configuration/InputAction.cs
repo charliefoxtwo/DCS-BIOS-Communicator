@@ -3,8 +3,7 @@ namespace DcsBios.Communicator.Configuration;
 
 public record InputAction : BiosInput
 {
-    public const string InterfaceType = "action";
+    public const string Interface = "action";
 
-    // TODO: enumify?
-    public string Argument { get; set; } = null!;
+    public const string Argument = "TOGGLE";
 }

@@ -27,10 +27,7 @@ public class InputConverter : JsonConverter
         var obj = JObject.Load(reader);
 
         // Remove the Result property for manual deserialization
-        var typeString = obj.GetValue(
-            nameof(BiosInput.Interface),
-            StringComparison.OrdinalIgnoreCase
-        );
+        var typeString = obj.GetValue("interface", StringComparison.OrdinalIgnoreCase);
 
         // Process the Result property
         if (typeString is null)

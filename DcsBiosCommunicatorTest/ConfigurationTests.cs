@@ -55,18 +55,11 @@ public class ConfigurationTests
         new()
         {
             ["AMPCD_BRT_CTL"] = (
-                new List<BiosInput>
-                {
-                    new InputSetState { Interface = "set_state", MaxValue = 65535 },
-                    new InputVariableStep
-                    {
-                        Interface = "variable_step",
-                        MaxValue = 65535,
-                        SuggestedStep = 3200,
-                    },
-                },
-                new List<BiosOutput>
-                {
+                [
+                    new InputSetState { MaxValue = 65535 },
+                    new InputVariableStep { MaxValue = 65535, SuggestedStep = 3200 },
+                ],
+                [
                     new OutputInteger
                     {
                         Address = 29920,
@@ -76,16 +69,11 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "integer",
                     },
-                }
+                ]
             ),
             ["AMPCD_CONT_SW"] = (
-                new List<BiosInput>
-                {
-                    new InputFixedStep { Interface = "fixed_step" },
-                    new InputSetState { Interface = "set_state", MaxValue = 2 },
-                },
-                new List<BiosOutput>
-                {
+                [new InputFixedStep(), new InputSetState { MaxValue = 2 }],
+                [
                     new OutputInteger
                     {
                         Address = 29804,
@@ -95,17 +83,11 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "integer",
                     },
-                }
+                ]
             ),
             ["AMPCD_PB_01"] = (
-                new List<BiosInput>
-                {
-                    new InputFixedStep { Interface = "fixed_step" },
-                    new InputSetState { Interface = "set_state", MaxValue = 1 },
-                    new InputAction { Argument = "TOGGLE", Interface = "action" },
-                },
-                new List<BiosOutput>
-                {
+                [new InputFixedStep(), new InputSetState { MaxValue = 1 }, new InputAction()],
+                [
                     new OutputInteger
                     {
                         Address = 29798,
@@ -115,12 +97,11 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "integer",
                     },
-                }
+                ]
             ),
             ["FIRE_APU_LT"] = (
-                new List<BiosInput>(),
-                new List<BiosOutput>
-                {
+                [],
+                [
                     new OutputInteger
                     {
                         Address = 29708,
@@ -130,15 +111,11 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "integer",
                     },
-                }
+                ]
             ),
             ["APU_CONTROL_SW"] = (
-                new List<BiosInput>
-                {
-                    new InputSetState { Interface = "set_state", MaxValue = 1 },
-                },
-                new List<BiosOutput>
-                {
+                [new InputSetState { MaxValue = 1 }],
+                [
                     new OutputInteger
                     {
                         Address = 29890,
@@ -148,16 +125,11 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "integer",
                     },
-                }
+                ]
             ),
             ["ENGINE_CRANK_SW"] = (
-                new List<BiosInput>
-                {
-                    new InputFixedStep { Interface = "fixed_step" },
-                    new InputSetState { Interface = "set_state", MaxValue = 2 },
-                },
-                new List<BiosOutput>
-                {
+                [new InputFixedStep(), new InputSetState { MaxValue = 2 }],
+                [
                     new OutputInteger
                     {
                         Address = 29890,
@@ -167,12 +139,11 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "integer",
                     },
-                }
+                ]
             ),
             ["CLOCK_ELAPSED_MINUTES"] = (
-                new List<BiosInput>(),
-                new List<BiosOutput>
-                {
+                [],
+                [
                     new OutputInteger
                     {
                         Address = 29968,
@@ -182,15 +153,11 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "integer",
                     },
-                }
+                ]
             ),
             ["EJECTION_HANDLE_SW"] = (
-                new List<BiosInput>
-                {
-                    new InputSetState { Interface = "set_state", MaxValue = 1 },
-                },
-                new List<BiosOutput>
-                {
+                [new InputSetState { MaxValue = 1 }],
+                [
                     new OutputInteger
                     {
                         Address = 29902,
@@ -200,16 +167,11 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "integer",
                     },
-                }
+                ]
             ),
             ["BLEED_AIR_KNOB"] = (
-                new List<BiosInput>
-                {
-                    new InputFixedStep { Interface = "fixed_step" },
-                    new InputSetState { Interface = "set_state", MaxValue = 3 },
-                },
-                new List<BiosOutput>
-                {
+                [new InputFixedStep(), new InputSetState { MaxValue = 3 }],
+                [
                     new OutputInteger
                     {
                         Address = 29894,
@@ -219,16 +181,11 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "integer",
                     },
-                }
+                ]
             ),
             ["HUD_VIDEO_CONTROL_SW"] = (
-                new List<BiosInput>
-                {
-                    new InputFixedStep { Interface = "fixed_step" },
-                    new InputSetState { Interface = "set_state", MaxValue = 2 },
-                },
-                new List<BiosOutput>
-                {
+                [new InputFixedStep(), new InputSetState { MaxValue = 2 }],
+                [
                     new OutputInteger
                     {
                         Address = 29740,
@@ -238,12 +195,11 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "integer",
                     },
-                }
+                ]
             ),
             ["IFEI_BINGO"] = (
-                new List<BiosInput>(),
-                new List<BiosOutput>
-                {
+                [],
+                [
                     new OutputString
                     {
                         Address = 29800,
@@ -251,20 +207,11 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "string",
                     },
-                }
+                ]
             ),
             ["RADALT_HEIGHT"] = (
-                new List<BiosInput>
-                {
-                    new InputVariableStep
-                    {
-                        Interface = "variable_step",
-                        MaxValue = 65535,
-                        SuggestedStep = 3200,
-                    },
-                },
-                new List<BiosOutput>
-                {
+                [new InputVariableStep { MaxValue = 65535, SuggestedStep = 3200 }],
+                [
                     new OutputInteger
                     {
                         Address = 29974,
@@ -274,19 +221,15 @@ public class ConfigurationTests
                         Suffix = "_KNOB_POS",
                         Type = "integer",
                     },
-                }
+                ]
             ),
             ["FAKE_CONTROL"] = (
-                new List<BiosInput> { new InputUnknown { Interface = "this_does_not_exist" } },
-                new List<BiosOutput>
-                {
-                    new OutputUnknown { Address = 29975, Type = "this_does_not_exist_either" },
-                }
+                [new InputUnknown()],
+                [new OutputUnknown { Address = 29975, Type = "this_does_not_exist_either" }]
             ),
             ["STRING_INPUT_CONTROL"] = (
-                new List<BiosInput> { new InputSetString { Interface = "set_string" } },
-                new List<BiosOutput>
-                {
+                [new InputSetString()],
+                [
                     new OutputString
                     {
                         Address = 29976,
@@ -294,7 +237,7 @@ public class ConfigurationTests
                         Suffix = string.Empty,
                         Type = "string",
                     },
-                }
+                ]
             ),
         };
 

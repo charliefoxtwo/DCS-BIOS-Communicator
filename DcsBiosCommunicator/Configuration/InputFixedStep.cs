@@ -2,7 +2,7 @@
 
 public record InputFixedStep : BiosInput
 {
-    public const string InterfaceType = "fixed_step";
+    public const string Interface = "fixed_step";
     public const string Increment = "INC";
     public const string Decrement = "DEC";
 }

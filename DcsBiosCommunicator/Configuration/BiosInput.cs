@@ -8,16 +8,13 @@ namespace DcsBios.Communicator.Configuration;
 [JsonConverter(typeof(InputConverter))]
 public abstract record BiosInput
 {
-    // TODO: enumify
-    public string Interface { get; set; } = null!;
-
     private static readonly Dictionary<string, Type> Types = new()
     {
-        [InputFixedStep.InterfaceType] = typeof(InputFixedStep),
-        [InputSetState.InterfaceType] = typeof(InputSetState),
-        [InputAction.InterfaceType] = typeof(InputAction),
-        [InputVariableStep.InterfaceType] = typeof(InputVariableStep),
-        [InputSetString.InterfaceType] = typeof(InputSetString),
+        [InputFixedStep.Interface] = typeof(InputFixedStep),
+        [InputSetState.Interface] = typeof(InputSetState),
+        [InputAction.Interface] = typeof(InputAction),
+        [InputVariableStep.Interface] = typeof(InputVariableStep),
+        [InputSetString.Interface] = typeof(InputSetString),
     };
 
     public static Type GetTypeForType(in string type)
