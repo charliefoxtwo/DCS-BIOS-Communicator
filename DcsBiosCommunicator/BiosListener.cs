@@ -164,8 +164,11 @@ public class BiosListener : IDisposable
             _log?.LogTrace("{Address:x4} -> got int data -> {Data:x4}", address, data);
             foreach (var mask in handler.MaskShifts)
             {
+                var oldData = mask.CurrentValue;
                 mask.AddData(address, data);
-                _biosTranslator.FromBios(mask.ModuleName, mask.BiosCode, mask.CurrentValue);
+                _biosTranslator.HandleIntegerData(
+                    new BiosPacket<int>(mask.ModuleName, mask.BiosCode, oldData, mask.CurrentValue)
+                );
             }
         }
 
@@ -190,6 +193,8 @@ public class BiosListener : IDisposable
     private void ProcessStringData(StringParser parser, ushort address, ushort data)
     {
         _log?.LogTrace("{Address:x4} -> got string data -> {Data:x4}", address, data);
+
+        var oldData = parser.CurrentValue;
 
         parser.AddData(address, data);
 
@@ -218,7 +223,9 @@ public class BiosListener : IDisposable
             }
         }
 
-        _biosTranslator.FromBios(parser.ModuleName, parser.BiosCode, result);
+        _biosTranslator.HandleStringData(
+            new BiosPacket<string>(parser.ModuleName, parser.BiosCode, oldData, result)
+        );
     }
 
     public void Start()
