@@ -21,14 +21,15 @@ public sealed class StringParser(
 
     private bool SetCharacter(int index, byte b)
     {
+        var hasChange = _buffer[index] != b;
         _buffer[index] = b;
 
-        if (!DataReady)
+        if (!DataReady && hasChange)
         {
             _bufferFilledBits |= index > 0 ? 2L << (index - 1) : 1L;
         }
 
-        return index + 1 == Length;
+        return hasChange;
     }
 
     /// <summary>
@@ -44,13 +45,13 @@ public sealed class StringParser(
 
         var offset = address - _baseAddress;
 
-        var done = SetCharacter(offset, b1);
-        if (!done)
+        var hasChange = SetCharacter(offset, b1);
+        if (offset + 1 != Length)
         {
-            SetCharacter(offset + 1, b2);
+            hasChange |= SetCharacter(offset + 1, b2);
         }
 
-        if (!DataReady)
+        if (!DataReady || !hasChange)
         {
             return;
         }
