@@ -17,7 +17,8 @@ public class BiosListener : IDisposable
     private readonly IUdpReceiveClient _client;
     private readonly Dictionary<int, IntegerHandler> _integerActions = new();
     private readonly Dictionary<int, IList<StringParser>> _stringActions = new();
-    private readonly Dictionary<string, Dictionary<int, IntegerHandler>> _moduleIntegerActions = new();
+    private readonly Dictionary<string, Dictionary<int, IntegerHandler>> _moduleIntegerActions =
+        new();
     private readonly Dictionary<string, Dictionary<int, StringParser>> _moduleStringActions = new();
     private string? _activeAircraft;
     private Task? _delegateThread;
@@ -27,7 +28,11 @@ public class BiosListener : IDisposable
     private readonly IBiosTranslator _biosTranslator;
     private readonly ILogger<BiosListener>? _log;
 
-    public BiosListener(in IUdpReceiveClient client, in IBiosTranslator biosTranslator, in ILogger<BiosListener>? logger)
+    public BiosListener(
+        in IUdpReceiveClient client,
+        in IBiosTranslator biosTranslator,
+        in ILogger<BiosListener>? logger
+    )
     {
         _client = client;
         _biosTranslator = biosTranslator;
@@ -49,7 +54,11 @@ public class BiosListener : IDisposable
     {
         foreach (var output in control.Outputs)
         {
-            _log?.LogTrace("Registering control {Control} at {Address}", control.Identifier, output.Address);
+            _log?.LogTrace(
+                "Registering control {Control} at {Address}",
+                control.Identifier,
+                output.Address
+            );
 
             switch (output)
             {
@@ -92,7 +101,10 @@ public class BiosListener : IDisposable
 
     private void RegisterStringControl(string module, BiosControl control, OutputString output)
     {
-        RegisterStringAddress(module, new StringParser(output.Address, output.MaxLength, control.Identifier, module));
+        RegisterStringAddress(
+            module,
+            new StringParser(output.Address, output.MaxLength, control.Identifier, module)
+        );
     }
 
     private void RegisterIntegerAddress(IntegerHandler handler)
@@ -117,7 +129,8 @@ public class BiosListener : IDisposable
 
             // the master list can have more than one item for a given module. Frankly if we ever have to use this we're probably
             // in some deep doo-doo, but it's better to be defensive given https://github.com/charliefoxtwo/TouchDCS/issues/18
-            if (!_stringActions.TryGetValue(parser.Address + i, out var parsers)) parsers = new List<StringParser>();
+            if (!_stringActions.TryGetValue(parser.Address + i, out var parsers))
+                parsers = new List<StringParser>();
             parsers.Add(parser);
             _stringActions[parser.Address + i] = parsers;
         }
@@ -129,10 +142,12 @@ public class BiosListener : IDisposable
     {
         _log?.LogTrace("{Address:x4} -> got data -> {Data:x4}", address, data);
 
-        if (_activeAircraft is not null &&
-            _moduleIntegerActions.TryGetValue(_activeAircraft, out var integerActions) &&
-            integerActions.TryGetValue(address, out var handler) ||
-            _integerActions.TryGetValue(address, out handler))
+        if (
+            _activeAircraft is not null
+                && _moduleIntegerActions.TryGetValue(_activeAircraft, out var integerActions)
+                && integerActions.TryGetValue(address, out var handler)
+            || _integerActions.TryGetValue(address, out handler)
+        )
         {
             _log?.LogTrace("{Address:x4} -> got int data -> {Data:x4}", address, data);
             foreach (var mask in handler.MaskShifts)
@@ -143,9 +158,11 @@ public class BiosListener : IDisposable
         }
 
         // some controls are registered to both strings and integers, because life is fun like that.
-        if (_activeAircraft is not null &&
-            _moduleStringActions.TryGetValue(_activeAircraft, out var stringActions) &&
-            stringActions.TryGetValue(address, out var parser))
+        if (
+            _activeAircraft is not null
+            && _moduleStringActions.TryGetValue(_activeAircraft, out var stringActions)
+            && stringActions.TryGetValue(address, out var parser)
+        )
         {
             ProcessStringData(parser, address, data);
         }
@@ -167,14 +184,19 @@ public class BiosListener : IDisposable
         var result = parser.CurrentValue;
         if (parser.BiosCode == AircraftNameBiosCode)
         {
-            if (!parser.DataReady) return;
+            if (!parser.DataReady)
+                return;
             // name is fixed-length and null-terminated. fun.
             result = result.Split(default(char))[0];
-            if (string.IsNullOrEmpty(result)) return; // we just haven't loaded the aircraft name yet
+            if (string.IsNullOrEmpty(result))
+                return; // we just haven't loaded the aircraft name yet
             if (_activeAircraft != result)
             {
                 _activeAircraft = result;
-                _log?.LogInformation("New aircraft detected -> {{{ActiveAircraft}}}", _activeAircraft);
+                _log?.LogInformation(
+                    "New aircraft detected -> {{{ActiveAircraft}}}",
+                    _activeAircraft
+                );
             }
         }
 

@@ -13,7 +13,12 @@ public class OutputConverter : JsonConverter
         throw new NotImplementedException();
     }
 
-    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+    public override object? ReadJson(
+        JsonReader reader,
+        Type objectType,
+        object? existingValue,
+        JsonSerializer serializer
+    )
     {
         if (reader.TokenType == JsonToken.Null)
             return null;
@@ -23,7 +28,8 @@ public class OutputConverter : JsonConverter
         var typeString = obj.GetValue(nameof(BiosOutput.Type), StringComparison.OrdinalIgnoreCase);
 
         // Process the Result property
-        if (typeString is null) throw new ArgumentException("configuration output doesn't contain a type");
+        if (typeString is null)
+            throw new ArgumentException("configuration output doesn't contain a type");
 
         var returnType = BiosOutput.GetTypeForType(typeString.Value<string>());
 

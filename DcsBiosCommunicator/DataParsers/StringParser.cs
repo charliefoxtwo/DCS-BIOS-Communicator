@@ -3,8 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DcsBios.Communicator.DataParsers;
 
-public sealed class StringParser(in ushort address, [Range(1, 64)] in byte length, in string biosCode, in string moduleName)
-    : DataParser<string>(address, biosCode, moduleName)
+public sealed class StringParser(
+    in ushort address,
+    [Range(1, 64)] in byte length,
+    in string biosCode,
+    in string moduleName
+) : DataParser<string>(address, biosCode, moduleName)
 {
     public bool DataReady => _bufferFilledBits == _bufferSizeBits;
 
@@ -35,8 +39,8 @@ public sealed class StringParser(in ushort address, [Range(1, 64)] in byte lengt
     /// <returns></returns>
     public override void AddData(in ushort address, in ushort data)
     {
-        var b1 = (byte) (data & 0xFF);
-        var b2 = (byte) (data >> 8);
+        var b1 = (byte)(data & 0xFF);
+        var b2 = (byte)(data >> 8);
 
         var offset = address - _baseAddress;
 
@@ -46,7 +50,8 @@ public sealed class StringParser(in ushort address, [Range(1, 64)] in byte lengt
             SetCharacter(offset + 1, b2);
         }
 
-        if (!DataReady) return;
+        if (!DataReady)
+            return;
 
         var newValue = System.Text.Encoding.UTF8.GetString(_buffer);
         if (newValue != CurrentValue)

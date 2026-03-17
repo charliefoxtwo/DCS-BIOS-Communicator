@@ -29,11 +29,16 @@ public class AircraftBiosConfiguration : Dictionary<string, BiosCategory>
     /// <param name="logger">Logger</param>
     /// <param name="configLocations">Directories containing json configuration files outlining all available DCS-BIOS inputs/outputs</param>
     /// <returns>Parsed aircraft configurations</returns>
-    public static async Task<AircraftBiosConfiguration[]> AllConfigurations(string? aliasesFileName = null, ILogger<AircraftBiosConfiguration>? logger = null,
-        params string[] configLocations)
+    public static async Task<AircraftBiosConfiguration[]> AllConfigurations(
+        string? aliasesFileName = null,
+        ILogger<AircraftBiosConfiguration>? logger = null,
+        params string[] configLocations
+    )
     {
         var allFiles = configLocations.SelectMany(GetAllJsonFilesBelowDirectory).ToList();
-        var aliasTasks = allFiles.Where(f => f.Name == aliasesFileName).Select(f => GetAliases(f, logger));
+        var aliasTasks = allFiles
+            .Where(f => f.Name == aliasesFileName)
+            .Select(f => GetAliases(f, logger));
         var aliasResults = await Task.WhenAll(aliasTasks);
 
         var aliases = new Dictionary<string, HashSet<string>>();
@@ -61,20 +66,26 @@ public class AircraftBiosConfiguration : Dictionary<string, BiosCategory>
     /// <param name="allAliases">Potential naming aliases to consider: BIOS module -> [DCS code alias]</param>
     /// <param name="logger">Logger</param>
     /// <returns></returns>
-    public static async Task<AircraftBiosConfiguration?> BuildFromConfiguration(FileSystemInfo configFile, Dictionary<string, HashSet<string>>? allAliases = null, ILogger<AircraftBiosConfiguration>? logger = null)
+    public static async Task<AircraftBiosConfiguration?> BuildFromConfiguration(
+        FileSystemInfo configFile,
+        Dictionary<string, HashSet<string>>? allAliases = null,
+        ILogger<AircraftBiosConfiguration>? logger = null
+    )
     {
         var fileData = await File.ReadAllTextAsync(configFile.FullName);
 
         try
         {
-            var dcsConfiguration = JsonConvert.DeserializeObject<AircraftBiosConfiguration>(fileData,
+            var dcsConfiguration = JsonConvert.DeserializeObject<AircraftBiosConfiguration>(
+                fileData,
                 new JsonSerializerSettings
                 {
                     ContractResolver = new DefaultContractResolver
                     {
                         NamingStrategy = new SnakeCaseNamingStrategy(),
-                    }
-                });
+                    },
+                }
+            );
 
             if (dcsConfiguration is null)
             {
@@ -83,7 +94,8 @@ public class AircraftBiosConfiguration : Dictionary<string, BiosCategory>
 
             dcsConfiguration.AircraftName = Path.GetFileNameWithoutExtension(configFile.FullName);
             dcsConfiguration.Aliases =
-                allAliases != null && allAliases.TryGetValue(dcsConfiguration.AircraftName, out var aircraftAliases)
+                allAliases != null
+                && allAliases.TryGetValue(dcsConfiguration.AircraftName, out var aircraftAliases)
                     ? aircraftAliases
                     : new HashSet<string>();
 
@@ -91,7 +103,10 @@ public class AircraftBiosConfiguration : Dictionary<string, BiosCategory>
         }
         catch (JsonSerializationException ex)
         {
-            logger?.LogWarning("Error parsing config file {ConfigFile}, skipping...", configFile.FullName);
+            logger?.LogWarning(
+                "Error parsing config file {ConfigFile}, skipping...",
+                configFile.FullName
+            );
             logger?.LogDebug(ex, "exception:");
             return null;
         }
@@ -103,21 +118,29 @@ public class AircraftBiosConfiguration : Dictionary<string, BiosCategory>
     /// <param name="aliasFile">File where aliases are saved</param>
     /// <param name="logger"></param>
     /// <returns>BIOS module -> [DCS code]</returns>
-    private static async Task<Dictionary<string, HashSet<string>>> GetAliases(FileSystemInfo aliasFile, ILogger<AircraftBiosConfiguration>? logger = null)
+    private static async Task<Dictionary<string, HashSet<string>>> GetAliases(
+        FileSystemInfo aliasFile,
+        ILogger<AircraftBiosConfiguration>? logger = null
+    )
     {
         var fileData = await File.ReadAllTextAsync(aliasFile.FullName);
         try
         {
-            var dict = JsonConvert.DeserializeObject<Dictionary<string, HashSet<string>>>(fileData) ??
-                       new Dictionary<string, HashSet<string>>();
+            var dict =
+                JsonConvert.DeserializeObject<Dictionary<string, HashSet<string>>>(fileData)
+                ?? new Dictionary<string, HashSet<string>>();
 
-            var r = dict.SelectMany(kvp => kvp.Value.Select(module => (module, kvp.Key))).GroupBy(t => t.module)
+            var r = dict.SelectMany(kvp => kvp.Value.Select(module => (module, kvp.Key)))
+                .GroupBy(t => t.module)
                 .ToDictionary(g => g.Key, g2 => g2.Select(t => t.Key).ToHashSet());
             return r;
         }
         catch (JsonSerializationException ex)
         {
-            logger?.LogWarning("Error parsing alias file {AliasFile}, skipping...", aliasFile.FullName);
+            logger?.LogWarning(
+                "Error parsing alias file {AliasFile}, skipping...",
+                aliasFile.FullName
+            );
             logger?.LogDebug(ex, "exception:");
             return new Dictionary<string, HashSet<string>>();
         }
@@ -133,6 +156,8 @@ public class AircraftBiosConfiguration : Dictionary<string, BiosCategory>
 
     private static string FullOrRelativePath(string path)
     {
-        return Path.IsPathFullyQualified(path) ? path : Path.Combine(Environment.CurrentDirectory, path);
+        return Path.IsPathFullyQualified(path)
+            ? path
+            : Path.Combine(Environment.CurrentDirectory, path);
     }
 }
