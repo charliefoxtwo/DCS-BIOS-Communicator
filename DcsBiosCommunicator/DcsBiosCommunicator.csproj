@@ -8,7 +8,7 @@
     <Title>DCS-BIOS Communicator</Title>
     <Authors>charliefoxtwo</Authors>
     <Description>Provides methods and classes for subscribing to DCS-BIOS events.</Description>
-    <PackageVersion>7.0.2</PackageVersion>
+    <PackageVersion>8.0.0</PackageVersion>
     <PackageProjectUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</PackageProjectUrl>
     <PackageLicenseUrl>https://www.gnu.org/licenses/gpl-3.0.en.html</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/charliefoxtwo/DCS-BIOS-Communicator</RepositoryUrl>
@@ -16,9 +16,11 @@
     <PackageTags>dcs</PackageTags>
     <PackageIcon>airplane.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/charliefoxtwo/DCS-BIOS-Communicator/main/DcsBiosCommunicator/resources/airplane.png</PackageIconUrl>
-    <PackageReleaseNotes>- Parse control descriptions</PackageReleaseNotes>
-    <AssemblyVersion>7.0.2</AssemblyVersion>
-    <FileVersion>7.0.2</FileVersion>
+    <PackageReleaseNotes>- Rework IBiosTranslator to provide additional context, including aircraft name and previous value
+    - Improve data parsing speed of static strings by 3-4x
+    - Change BiosInput.Interface to be subclass constants</PackageReleaseNotes>
+    <AssemblyVersion>8.0.0</AssemblyVersion>
+    <FileVersion>8.0.0</FileVersion>
     <LangVersion>default</LangVersion>
   </PropertyGroup>
 
