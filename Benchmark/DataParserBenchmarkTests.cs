@@ -7,8 +7,8 @@ namespace Benchmark;
 [SimpleJob(RuntimeMoniker.Net80, baseline: true)]
 public class DataParserBenchmarkTests
 {
-    private readonly StringParser _stringParser = new(0, 2, "ID");
-    private readonly IntegerParser _intParser = new(8, 3, "ID");
+    private readonly StringParser _stringParser = new(0, 2, "ID", "CommonData");
+    private readonly IntegerParser _intParser = new(8, 3, "ID", "CommonData");
 
     private const int TestStringData = 'a' | ('b' << 8);
     private const int ClearStringData = ' ' | (' ' << 8);

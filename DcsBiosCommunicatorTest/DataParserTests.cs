@@ -9,7 +9,7 @@ public class DataParserTests
     [Test]
     public void Test2CharString()
     {
-        var parser = new StringParser(0, 2, "ID");
+        var parser = new StringParser(0, 2, "ID", "CommonData");
 
         const int data = 'a' | ('b' << 8);
 
@@ -22,7 +22,7 @@ public class DataParserTests
     [Test]
     public void TestInt()
     {
-        var parser = new IntegerParser(8, 3, "ID");
+        var parser = new IntegerParser(8, 3, "ID", "CommonData");
 
         parser.AddData(0, 10);
 

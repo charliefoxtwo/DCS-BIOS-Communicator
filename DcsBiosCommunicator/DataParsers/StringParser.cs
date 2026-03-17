@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DcsBios.Communicator.DataParsers;
 
-public sealed class StringParser(in ushort address, [Range(1, 64)] in byte length, in string biosCode)
-    : DataParser<string>(address, biosCode)
+public sealed class StringParser(in ushort address, [Range(1, 64)] in byte length, in string biosCode, in string moduleName)
+    : DataParser<string>(address, biosCode, moduleName)
 {
     public bool DataReady => _bufferFilledBits == _bufferSizeBits;
 

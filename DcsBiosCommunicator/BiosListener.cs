@@ -68,7 +68,7 @@ public class BiosListener : IDisposable
 
     private void RegisterIntegerControl(string module, BiosControl control, OutputInteger output)
     {
-        var newParser = new IntegerParser(output.Mask, output.ShiftBy, control.Identifier);
+        var newParser = new IntegerParser(output.Mask, output.ShiftBy, control.Identifier, module);
         if (!_moduleIntegerActions.ContainsKey(module))
             _moduleIntegerActions[module] = new Dictionary<int, IntegerHandler>();
         if (_moduleIntegerActions[module].TryGetValue(output.Address, out var moduleHandler))
@@ -92,7 +92,7 @@ public class BiosListener : IDisposable
 
     private void RegisterStringControl(string module, BiosControl control, OutputString output)
     {
-        RegisterStringAddress(module, new StringParser(output.Address, output.MaxLength, control.Identifier));
+        RegisterStringAddress(module, new StringParser(output.Address, output.MaxLength, control.Identifier, module));
     }
 
     private void RegisterIntegerAddress(IntegerHandler handler)
@@ -138,7 +138,7 @@ public class BiosListener : IDisposable
             foreach (var mask in handler.MaskShifts)
             {
                 mask.AddData(address, data);
-                _biosTranslator.FromBios(mask.BiosCode, mask.CurrentValue);
+                _biosTranslator.FromBios(mask.ModuleName, mask.BiosCode, mask.CurrentValue);
             }
         }
 
@@ -178,7 +178,7 @@ public class BiosListener : IDisposable
             }
         }
 
-        _biosTranslator.FromBios(parser.BiosCode, result);
+        _biosTranslator.FromBios(parser.ModuleName, parser.BiosCode, result);
     }
 
     public void Start()
