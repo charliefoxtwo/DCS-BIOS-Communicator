@@ -51,7 +51,9 @@ public sealed class StringParser(
         }
 
         if (!DataReady)
+        {
             return;
+        }
 
         var newValue = System.Text.Encoding.UTF8.GetString(_buffer);
         if (newValue != CurrentValue)

@@ -79,7 +79,10 @@ public class BiosListener : IDisposable
     {
         var newParser = new IntegerParser(output.Mask, output.ShiftBy, control.Identifier, module);
         if (!_moduleIntegerActions.ContainsKey(module))
+        {
             _moduleIntegerActions[module] = new Dictionary<int, IntegerHandler>();
+        }
+
         if (_moduleIntegerActions[module].TryGetValue(output.Address, out var moduleHandler))
         {
             moduleHandler.MaskShifts.Add(newParser);
@@ -115,14 +118,20 @@ public class BiosListener : IDisposable
     private void RegisterIntegerAddress(string module, IntegerHandler handler)
     {
         if (!_moduleIntegerActions.ContainsKey(module))
+        {
             _moduleIntegerActions[module] = new Dictionary<int, IntegerHandler>();
+        }
+
         _moduleIntegerActions[module][handler.Address] = handler;
     }
 
     private void RegisterStringAddress(string module, StringParser parser)
     {
         if (!_moduleStringActions.TryGetValue(module, out var moduleParsers))
+        {
             moduleParsers = new Dictionary<int, StringParser>();
+        }
+
         for (var i = 0; i < parser.Length; i++)
         {
             moduleParsers.Add(parser.Address + i, parser);
@@ -130,7 +139,10 @@ public class BiosListener : IDisposable
             // the master list can have more than one item for a given module. Frankly if we ever have to use this we're probably
             // in some deep doo-doo, but it's better to be defensive given https://github.com/charliefoxtwo/TouchDCS/issues/18
             if (!_stringActions.TryGetValue(parser.Address + i, out var parsers))
+            {
                 parsers = new List<StringParser>();
+            }
+
             parsers.Add(parser);
             _stringActions[parser.Address + i] = parsers;
         }
@@ -185,11 +197,17 @@ public class BiosListener : IDisposable
         if (parser.BiosCode == AircraftNameBiosCode)
         {
             if (!parser.DataReady)
+            {
                 return;
+            }
+
             // name is fixed-length and null-terminated. fun.
             result = result.Split(default(char))[0];
             if (string.IsNullOrEmpty(result))
+            {
                 return; // we just haven't loaded the aircraft name yet
+            }
+
             if (_activeAircraft != result)
             {
                 _activeAircraft = result;

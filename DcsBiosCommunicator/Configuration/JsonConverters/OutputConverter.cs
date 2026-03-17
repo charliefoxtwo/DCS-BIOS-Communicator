@@ -21,7 +21,10 @@ public class OutputConverter : JsonConverter
     )
     {
         if (reader.TokenType == JsonToken.Null)
+        {
             return null;
+        }
+
         var obj = JObject.Load(reader);
 
         // Remove the Result property for manual deserialization
@@ -29,7 +32,9 @@ public class OutputConverter : JsonConverter
 
         // Process the Result property
         if (typeString is null)
+        {
             throw new ArgumentException("configuration output doesn't contain a type");
+        }
 
         var returnType = BiosOutput.GetTypeForType(typeString.Value<string>());
 
