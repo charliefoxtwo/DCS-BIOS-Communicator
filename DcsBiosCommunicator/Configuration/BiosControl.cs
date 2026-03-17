@@ -14,4 +14,5 @@ public record BiosControl(
     List<BiosOutput> Outputs,
     DeprecatedAttribute? Deprecated,
     List<string>? Positions,
-    string? Color);
+    string? Color
+);

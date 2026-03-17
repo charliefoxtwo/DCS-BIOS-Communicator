@@ -3,5 +3,5 @@ namespace DcsBios.Communicator.Configuration;
 
 public record InputSetString : BiosInput
 {
-    public const string InterfaceType = "set_string";
+    public const string Interface = "set_string";
 }

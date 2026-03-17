@@ -1,45 +1,43 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
 
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
 
-        <IsPackable>false</IsPackable>
+    <LangVersion>default</LangVersion>
 
-        <LangVersion>default</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="4.5.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="NUnit" Version="4.5.0" />
-        <PackageReference Include="NUnit3TestAdapter" Version="6.1.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Bad\AircraftAliases.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Remove="Resources\Good\AircraftAliases.json" />
+    <EmbeddedResource Include="Resources\Good\AircraftAliases.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Remove="Resources\Bad\FA-18C_hornet.json" />
+    <EmbeddedResource Include="Resources\Bad\FA-18C_hornet.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Remove="Resources\Good\hornet2.json" />
+    <EmbeddedResource Include="Resources\Good\FA-18C_hornet.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Remove="Resources\Good\Tests.json" />
+    <EmbeddedResource Include="Resources\Good\Tests.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
 
-    <ItemGroup>
-      <EmbeddedResource Include="Resources\Bad\AircraftAliases.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <None Remove="Resources\Good\AircraftAliases.json" />
-      <EmbeddedResource Include="Resources\Good\AircraftAliases.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <None Remove="Resources\Bad\FA-18C_hornet.json" />
-      <EmbeddedResource Include="Resources\Bad\FA-18C_hornet.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <None Remove="Resources\Good\hornet2.json" />
-      <EmbeddedResource Include="Resources\Good\FA-18C_hornet.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <None Remove="Resources\Good\Tests.json" />
-      <EmbeddedResource Include="Resources\Good\Tests.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\DcsBiosCommunicator\DcsBiosCommunicator.csproj" />
-    </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\DcsBiosCommunicator\DcsBiosCommunicator.csproj" />
+  </ItemGroup>
 </Project>

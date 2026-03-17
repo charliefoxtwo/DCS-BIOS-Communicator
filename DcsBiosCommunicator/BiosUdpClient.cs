@@ -17,7 +17,12 @@ public class BiosUdpClient : IUdpReceiveClient, IBiosSendClient, IDisposable
     private readonly IPEndPoint _target;
     private readonly ILogger<BiosUdpClient>? _log;
 
-    public BiosUdpClient(IPAddress ipAddress, int sendPort, int receivePort, in ILogger<BiosUdpClient>? logger)
+    public BiosUdpClient(
+        IPAddress ipAddress,
+        int sendPort,
+        int receivePort,
+        in ILogger<BiosUdpClient>? logger
+    )
     {
         _log = logger;
 
@@ -26,11 +31,15 @@ public class BiosUdpClient : IUdpReceiveClient, IBiosSendClient, IDisposable
         _client = new UdpClient { ExclusiveAddressUse = false };
 
         // TODO: this should probably be loopback?
-        IPEndPoint localEndpoint = new (IPAddress.Any, receivePort);
+        IPEndPoint localEndpoint = new(IPAddress.Any, receivePort);
 
         _target = new IPEndPoint(IPAddress.Broadcast, sendPort);
 
-        _client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+        _client.Client.SetSocketOption(
+            SocketOptionLevel.Socket,
+            SocketOptionName.ReuseAddress,
+            true
+        );
 
         _client.Client.Bind(localEndpoint);
     }
