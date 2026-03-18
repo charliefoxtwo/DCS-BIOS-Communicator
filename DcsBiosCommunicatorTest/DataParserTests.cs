@@ -92,6 +92,31 @@ public class DataParserTests
     }
 
     [Test]
+    public void Test4CharStringWithNullByte()
+    {
+        var parser = new StringParser(0, 4, "ID", "CommonData");
+
+        const int data = 'a' | ('b' << 8);
+
+        parser.AddData(0, data);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(parser.DataReady, Is.False);
+            Assert.That(parser.CurrentValue, Is.EqualTo(string.Empty));
+        });
+
+        const int data2 = '\0' | ('b' << 8);
+        parser.AddData(2, data2);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(parser.DataReady, Is.True);
+            Assert.That(parser.CurrentValue, Is.EqualTo("ab\0b"));
+        });
+    }
+
+    [Test]
     public void TestInt()
     {
         var parser = new IntegerParser(8, 3, "ID", "CommonData");

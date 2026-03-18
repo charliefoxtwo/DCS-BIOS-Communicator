@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DcsBios.Communicator.DataParsers;
 
@@ -9,10 +10,10 @@ public sealed class StringParser(
     in string moduleName
 ) : DataParser<string>(address, biosCode, moduleName, string.Empty)
 {
-    public bool DataReady => _bufferFilledBits == _bufferSizeBits;
+    public bool DataReady { get; private set; }
 
     public byte Length { get; } = length;
-    private readonly byte[] _buffer = new byte[length];
+    private readonly char[] _buffer = new char[length];
     private readonly long _bufferSizeBits = (2L << (length - 1)) - 1;
     private long _bufferFilledBits;
 
@@ -20,16 +21,22 @@ public sealed class StringParser(
 
     private bool SetCharacter(int index, byte b)
     {
-        var hasChange = _buffer[index] != b;
-        _buffer[index] = b;
+        // if b is the default character, then it will match the _buffer[index] value if it hasn't been set yet
+        // so we check _bufferFilledBits - if it hasn't been set yet, then this is new data
+        var hasChange =
+            _buffer[index] != b || (b == 0 && (_bufferFilledBits & BufferBit(index)) == 0);
+        _buffer[index] = (char)b;
 
         if (!DataReady && hasChange)
         {
-            _bufferFilledBits |= index > 0 ? 2L << (index - 1) : 1L;
+            _bufferFilledBits |= BufferBit(index);
+            DataReady = _bufferFilledBits == _bufferSizeBits;
         }
 
         return hasChange;
     }
+
+    private static long BufferBit(int index) => index > 0 ? 2L << (index - 1) : 1L;
 
     /// <summary>
     /// Builds upon the existing string data
@@ -55,10 +62,6 @@ public sealed class StringParser(
             return;
         }
 
-        var newValue = System.Text.Encoding.UTF8.GetString(_buffer);
-        if (newValue != CurrentValue)
-        {
-            CurrentValue = newValue;
-        }
+        CurrentValue = new string(_buffer);
     }
 }
