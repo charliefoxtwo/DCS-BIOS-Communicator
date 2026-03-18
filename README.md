@@ -56,7 +56,7 @@ var biosListener = new BiosListener(client, translator, logger);
 
 // register the json configuration files
 var configLocation = "%userprofile%/Saved Games/DCS.openbeta/Scripts/DCS-BIOS/doc/json/";
-foreach (var config in await AircraftBiosConfiguration.AllConfigurations(configLocation))
+foreach (var config in await AircraftBiosConfiguration.AllConfigurations("AircraftAliases.json", null, configLocation))
 {
     biosListener.RegisterConfiguration(config);
 }
@@ -69,17 +69,26 @@ biosListener.Start();
 ## Benchmarks
 Benchmarks are strictly for parsing data received from the UDP server and do not include network time or UDP receive time.
 ```
-BenchmarkDotNet v0.13.12, Windows 11
-AMD Ryzen 9 5900X, 1 CPU, 24 logical and 12 physical cores
-.NET SDK 8.0.206
+BenchmarkDotNet v0.15.8, Windows 11 (10.0.26200.8037/25H2/2025Update/HudsonValley2)
+AMD Ryzen 9 5900X 3.70GHz, 1 CPU, 24 logical and 12 physical cores
+.NET SDK 10.0.104
+  [Host]    : .NET 10.0.4 (10.0.4, 10.0.426.12010), X64 RyuJIT x86-64-v3
+  .NET 10.0 : .NET 10.0.4 (10.0.4, 10.0.426.12010), X64 RyuJIT x86-64-v3
 
-Job=.NET 8.0  Runtime=.NET 8.0
+Job=.NET 10.0  Runtime=.NET 10.0 
 ```
-| Method     | Mean      | Error     | StdDev    | Ratio |
-|----------- |----------:|----------:|----------:|------:|
-| TestString | 30.043 ns | 0.1793 ns | 0.1677 ns |  1.00 |
-|            |           |           |           |       |
-| TestInt    |  1.290 ns | 0.0114 ns | 0.0106 ns |  1.00 |
+| Method                          | Mean      | Error     | StdDev    | Ratio |
+|-------------------------------- |----------:|----------:|----------:|------:|
+| TestString                      | 18.755 ns | 0.1287 ns | 0.1141 ns |  1.00 |
+|                                 |           |           |           |       |
+| TestStringLong                  | 78.163 ns | 0.2841 ns | 0.2372 ns |  1.00 |
+|                                 |           |           |           |       |
+| TestStringWithDuplicateData     |  7.383 ns | 0.0312 ns | 0.0292 ns |  1.00 |
+|                                 |           |           |           |       |
+| TestStringWithDuplicateDataLong | 28.621 ns | 0.1415 ns | 0.1324 ns |  1.00 |
+|                                 |           |           |           |       |
+| TestInt                         |  1.250 ns | 0.0085 ns | 0.0075 ns |  1.00 |
+
 
 ## Roadmap
 
