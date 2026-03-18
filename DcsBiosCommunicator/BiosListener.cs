@@ -198,16 +198,19 @@ public class BiosListener : IDisposable
 
         parser.AddData(address, data);
 
+        if (!parser.DataReady)
+        {
+            // don't send string data if we haven't built up the full string yet
+            // otherwise, we'll just send an empty string
+            return;
+        }
+
         var result = parser.CurrentValue;
+
         if (parser.BiosCode == AircraftNameBiosCode)
         {
-            if (!parser.DataReady)
-            {
-                return;
-            }
-
             // name is fixed-length and null-terminated. fun.
-            result = result.Split(default(char))[0];
+            result = result.Split('\0')[0];
             if (string.IsNullOrEmpty(result))
             {
                 return; // we just haven't loaded the aircraft name yet
